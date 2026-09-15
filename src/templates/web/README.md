@@ -26,22 +26,22 @@ Built with React, Vite, TypeScript, and Tailwind CSS.
 
 ## Overview
 
-**{{PROJECT_NAME}}** was scaffolded using [GMK Launchpad](https://gmkdynamics.com), the project generation toolkit developed by GMK Dynamics.
+**{{PROJECT_NAME}}** was scaffolded using **GMK Launchpad**, the project generation toolkit developed by GMK Dynamics.
 
-The project includes an opinionated frontend foundation designed for modern React applications with sensible defaults for development, formatting, linting, project structure, and path aliases.
+The project includes an opinionated frontend foundation designed for modern React applications with sensible defaults for development, formatting, linting, type checking, project structure, and path aliases.
 
 ## Tech Stack
 
-- React
-- Vite
+- React 19
+- Vite 7
 - TypeScript
-- Tailwind CSS
+- Tailwind CSS 4
 - ESLint
 - Prettier
 
 ## Requirements
 
-Before getting started, make sure you have the following installed:
+Before getting started, make sure you have:
 
 - Node.js
 - npm
@@ -74,16 +74,26 @@ npm run preview
 
 ## Available Scripts
 
-| Command                | Description                                                   |
-| ---------------------- | ------------------------------------------------------------- |
-| `npm run dev`          | Starts the Vite development server                            |
-| `npm run build`        | Type-checks and creates the production build                  |
-| `npm run preview`      | Serves the production build locally                           |
-| `npm run lint`         | Runs ESLint                                                   |
-| `npm run lint:fix`     | Runs ESLint and automatically fixes supported issues          |
-| `npm run format`       | Formats the project with Prettier                             |
-| `npm run format:check` | Checks project formatting                                     |
-| `npm run check`        | Runs linting, formatting validation, and the production build |
+### Development
+
+| Command              | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| `npm run dev`        | Starts the Vite development server                           |
+| `npm run build`      | Type-checks the project and creates the production build     |
+| `npm run build:test` | Type-checks the project without producing a production build |
+| `npm run preview`    | Serves the production build locally                          |
+
+### Code Quality
+
+| Command                | Description                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------- |
+| `npm run lint`         | Runs ESLint                                                                   |
+| `npm run lint:fix`     | Runs ESLint and automatically fixes supported issues                          |
+| `npm run format`       | Formats the project using Prettier                                            |
+| `npm run format:check` | Checks whether files comply with Prettier formatting                          |
+| `npm run check`        | Runs linting, formatting, formatting validation, and TypeScript type checking |
+
+> `npm run check` includes `npm run format`, so it may modify files that do not currently match the configured Prettier rules.
 
 ## Project Structure
 
@@ -118,7 +128,7 @@ src/
 
 ## Path Aliases
 
-The project includes the following aliases:
+The project includes the following path aliases:
 
 | Alias           | Directory          |
 | --------------- | ------------------ |
@@ -136,8 +146,8 @@ The project includes the following aliases:
 For example:
 
 ```ts
-import ExampleComponent from '@shared/components/example.component';
-import { ExampleService } from '@services/example.service';
+import ExampleComponent from "@shared/components/example.component";
+import { ExampleService } from "@services/example.service";
 ```
 
 ## Environment Variables
@@ -146,17 +156,19 @@ Environment-specific configuration should be stored in local `.env` files.
 
 Use the included `.env.example` as the starting point:
 
-```bash
+```env
 VITE_API_BASE_URL=http://localhost:3000/api/v1
 ```
 
 Create your local environment file:
 
+### macOS / Linux
+
 ```bash
 cp .env.example .env
 ```
 
-On Windows PowerShell:
+### Windows PowerShell
 
 ```powershell
 Copy-Item .env.example .env
@@ -166,29 +178,99 @@ Do not commit environment files containing secrets or environment-specific crede
 
 ## Code Quality
 
-Before committing changes, you can run the complete project validation:
+Before committing changes, run:
 
 ```bash
 npm run check
 ```
 
-This validates:
+The complete project check runs:
 
 ```text
 ESLint
   ↓
-Prettier
+Prettier formatting
   ↓
+Prettier validation
+  ↓
+TypeScript type checking
+```
+
+Because the check command uses:
+
+```bash
+npm run build:test
+```
+
+it validates TypeScript without creating the production `dist/` output.
+
+For a complete production build, run:
+
+```bash
+npm run build
+```
+
+This performs:
+
+```text
 TypeScript
   ↓
-Vite Production Build
+Vite production build
+  ↓
+dist/
+```
+
+## Styling
+
+Tailwind CSS is configured through the Vite integration and is available throughout the application.
+
+The main stylesheet is:
+
+```text
+src/index.css
+```
+
+Application-specific styles can also be organized under:
+
+```text
+src/shared/styles/
+```
+
+The starter also includes:
+
+```text
+src/App.css
+```
+
+for application-level styles when needed.
+
+## TypeScript
+
+The project uses separate TypeScript configurations for application and tooling concerns:
+
+```text
+tsconfig.json
+tsconfig.app.json
+tsconfig.node.json
+```
+
+The production build runs:
+
+```bash
+tsc -b && vite build
+```
+
+while the type-check-only command runs:
+
+```bash
+tsc -b --noEmit
 ```
 
 ## GMK Launchpad
 
 This project was generated with **GMK Launchpad**.
 
-GMK Launchpad provides opinionated project scaffolding developed around the engineering standards used by GMK Dynamics.
+GMK Launchpad provides opinionated project scaffolding based on the engineering standards used by GMK Dynamics.
 
 <div align="center">
 
