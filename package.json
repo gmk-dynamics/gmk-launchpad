@@ -1,0 +1,65 @@
+{
+  "name": "@gmkdynamics/launchpad",
+  "version": "0.1.0",
+  "description": "GMK Dynamics project scaffolding CLI",
+  "type": "module",
+  "bin": {
+    "gmk": "./dist/cli.js"
+  },
+  "keywords": [
+    "gmk",
+    "gmk-dynamics",
+    "launchpad",
+    "cli",
+    "scaffolding",
+    "project-generator",
+    "starter",
+    "typescript",
+    "react",
+    "vite",
+    "express",
+    "tailwindcss",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "GMK Dynamics",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsc && node scripts/copy-templates.mjs",
+    "build:test": "tsc --noEmit",
+    "start": "node dist/cli.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format && npm run format:check && npm run build"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.7.2",
+    "chalk": "^6.0.0",
+    "commander": "^15.0.0",
+    "fs-extra": "^11.4.0",
+    "ora": "^9.4.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^26.6.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "typescript": "5.9",
+    "typescript-eslint": "^8.70.0",
+    "vite": "^8.3.0"
+  }
+}
