@@ -7,6 +7,10 @@ export interface TemplateVariables {
   packageName: string;
 }
 
+const TEMPLATE_FILE_RENAMES = new Map<string, string>([['gitignore.template', '.gitignore']]);
+
+const TEMPLATE_DIRECTORY_RENAMES = new Map<string, string>([['vscode.template', '.vscode']]);
+
 const TEMPLATE_VARIABLE_PATTERN = /\{\{([A-Z_]+)\}\}/g;
 
 const TEXT_EXTENSIONS = new Set([
@@ -34,6 +38,7 @@ const TEXT_FILENAMES = new Set([
   '.prettierignore',
   '.prettierrc',
   'Dockerfile',
+  'gitignore.template',
 ]);
 
 const isTextFile = (filePath: string): boolean => {
@@ -102,6 +107,28 @@ const processDirectory = async (
   }
 };
 
+const renameTemplateArtifacts = async (directoryPath: string): Promise<void> => {
+  for (const [sourceName, destinationName] of TEMPLATE_FILE_RENAMES) {
+    const sourcePath = path.join(directoryPath, sourceName);
+
+    if (await fs.pathExists(sourcePath)) {
+      await fs.move(sourcePath, path.join(directoryPath, destinationName), {
+        overwrite: true,
+      });
+    }
+  }
+
+  for (const [sourceName, destinationName] of TEMPLATE_DIRECTORY_RENAMES) {
+    const sourcePath = path.join(directoryPath, sourceName);
+
+    if (await fs.pathExists(sourcePath)) {
+      await fs.move(sourcePath, path.join(directoryPath, destinationName), {
+        overwrite: true,
+      });
+    }
+  }
+};
+
 export const copyTemplate = async (
   templatePath: string,
   destinationPath: string,
@@ -110,4 +137,6 @@ export const copyTemplate = async (
   await fs.copy(templatePath, destinationPath);
 
   await processDirectory(destinationPath, variables);
+
+  await renameTemplateArtifacts(destinationPath);
 };
