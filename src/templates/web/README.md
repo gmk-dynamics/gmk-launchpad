@@ -146,8 +146,8 @@ The project includes the following path aliases:
 For example:
 
 ```ts
-import ExampleComponent from "@shared/components/example.component";
-import { ExampleService } from "@services/example.service";
+import ExampleComponent from '@shared/components/example.component';
+import { ExampleService } from '@services/example.service';
 ```
 
 ## Environment Variables
