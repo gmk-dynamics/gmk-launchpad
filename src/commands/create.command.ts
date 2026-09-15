@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { generateApiProject } from '../generators/api.generator.js';
+import { generateFullStackProject } from '../generators/full-stack.generator.js';
 import { generateWebProject } from '../generators/web.generator.js';
 import { promptCreateProject } from '../prompts/create.prompt.js';
 import {
@@ -44,7 +45,7 @@ export const createCommand = new Command('create')
     printInfo('Name', config.projectName);
     printInfo('Type', getProjectTypeLabel(config.projectType));
 
-    if (config.projectType === 'react-vite' || config.projectType === 'full-stack') {
+    if (config.projectType === 'react-vite') {
       printInfo('Web', config.webDirectoryName);
 
       if (config.projectType === 'react-vite') {
@@ -52,7 +53,11 @@ export const createCommand = new Command('create')
 
         printSuccess(`${config.projectName} created successfully.`);
 
-        printNextSteps([`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev']);
+        printNextSteps([
+          {
+            commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
+          },
+        ]);
 
         return;
       }
@@ -60,7 +65,7 @@ export const createCommand = new Command('create')
       printSuccess('Project configuration ready.');
     }
 
-    if (config.projectType === 'express-api' || config.projectType === 'full-stack') {
+    if (config.projectType === 'express-api') {
       printInfo('API', config.apiDirectoryName);
 
       await generateApiProject(config);
@@ -68,11 +73,38 @@ export const createCommand = new Command('create')
       printSuccess(`${config.projectName} API created successfully.`);
 
       printNextSteps([
-        `cd ${config.apiDirectoryName}`,
-        'npm install',
-        'Create .env from .env.example',
-        'npm run prisma:migrate',
-        'npm run dev',
+        {
+          commands: [
+            `cd ${config.apiDirectoryName}`,
+            'npm install',
+            'Create .env from .env.example',
+            'npm run dev',
+          ],
+        },
+      ]);
+
+      return;
+    }
+
+    if (config.projectType === 'full-stack') {
+      await generateFullStackProject(config);
+
+      printSuccess(`${config.projectName} full-stack project created successfully.`);
+
+      printNextSteps([
+        {
+          title: 'Web',
+          commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
+        },
+        {
+          title: 'API',
+          commands: [
+            `cd ${config.apiDirectoryName}`,
+            'npm install',
+            'Create .env from .env.example',
+            'npm run dev',
+          ],
+        },
       ]);
 
       return;

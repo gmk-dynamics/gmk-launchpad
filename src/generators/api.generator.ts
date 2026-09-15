@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ora from 'ora';
@@ -31,9 +32,15 @@ export const generateApiProject = async (config: CreateProjectConfig): Promise<v
 
     await createProjectDirectories(destinationPath, API_DIRECTORIES);
 
-    spinner.succeed(`Created ${config.apiDirectoryName}`);
+    spinner.stopAndPersist({
+      symbol: chalk.green('✔'),
+      text: `  Created ${config.apiDirectoryName}`,
+    });
   } catch (error) {
-    spinner.fail(`Failed to create ${config.apiDirectoryName}`);
+    spinner.stopAndPersist({
+      symbol: chalk.red('✖'),
+      text: `  Failed to create ${config.apiDirectoryName}`,
+    });
 
     throw error;
   }

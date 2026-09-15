@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-
 import {
   CLI_VERSION,
   GMK_DYNAMICS_TEXT,
@@ -8,6 +7,11 @@ import {
   GMK_PRIMARY_COLOR,
   GMK_WEBSITE,
 } from '../constants/branding.constants.js';
+
+interface NextStepsGroup {
+  title?: string;
+  commands: string[];
+}
 
 const brand = chalk.hex(GMK_PRIMARY_COLOR);
 
@@ -65,16 +69,16 @@ export const printInfo = (label: string, value: string): void => {
 
 export const printSuccess = (message: string): void => {
   console.log();
-  console.log(`${chalk.green('✔')} ${chalk.bold(message)}`);
+  console.log(`${chalk.green('✔')}  ${chalk.bold(message)}`);
   console.log();
 };
 
 export const printWarning = (message: string): void => {
-  console.log(`${chalk.yellow('!')} ${message}`);
+  console.log(`${chalk.yellow('!')}  ${message}`);
 };
 
 export const printError = (message: string): void => {
-  console.log(`${chalk.red('✖')} ${message}`);
+  console.log(`${chalk.red('✖')}  ${message}`);
 };
 
 export const printCancelled = (): void => {
@@ -83,12 +87,22 @@ export const printCancelled = (): void => {
   console.log();
 };
 
-export const printNextSteps = (commands: string[]): void => {
+export const printNextSteps = (groups: NextStepsGroup[]): void => {
   console.log(brand.bold('◆ Next Steps'));
   console.log();
 
-  commands.forEach((command) => {
-    console.log(`  ${chalk.cyan(command)}`);
+  groups.forEach((group, index) => {
+    if (group.title) {
+      console.log(chalk.bold(`  ${group.title}`));
+    }
+
+    group.commands.forEach((command) => {
+      console.log(`    ${chalk.cyan(command)}`);
+    });
+
+    if (index < groups.length - 1) {
+      console.log();
+    }
   });
 
   console.log();

@@ -9,6 +9,7 @@ import {
 } from '../shared/filesystem/project.filesystem.js';
 import { copyTemplate, type TemplateVariables } from '../shared/filesystem/template.filesystem.js';
 
+import chalk from 'chalk';
 import { WEB_DIRECTORIES } from '../shared/constants/web-template.constants.js';
 import type { CreateProjectConfig } from '../types/project.types.js';
 
@@ -34,9 +35,15 @@ export const generateWebProject = async (config: CreateProjectConfig): Promise<v
 
     await createProjectDirectories(destinationPath, WEB_DIRECTORIES);
 
-    spinner.succeed(`Created ${config.webDirectoryName}`);
+    spinner.stopAndPersist({
+      symbol: chalk.green('✔'),
+      text: `  Created ${config.webDirectoryName}`,
+    });
   } catch (error) {
-    spinner.fail(`Failed to create ${config.webDirectoryName}`);
+    spinner.stopAndPersist({
+      symbol: chalk.red('✖'),
+      text: `  Failed to create ${config.webDirectoryName}`,
+    });
 
     throw error;
   }

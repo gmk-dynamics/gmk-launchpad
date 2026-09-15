@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+
 import { createCommand } from './commands/create.command.js';
-import { printBanner, printCancelled } from './shared/logger/console.logger.js';
+import { printBanner, printCancelled, printError } from './shared/logger/console.logger.js';
 
 const program = new Command();
 
@@ -20,5 +21,11 @@ try {
     process.exit(0);
   }
 
-  throw error;
+  if (error instanceof Error) {
+    printError(error.message);
+    process.exit(1);
+  }
+
+  printError('An unexpected error occurred.');
+  process.exit(1);
 }
