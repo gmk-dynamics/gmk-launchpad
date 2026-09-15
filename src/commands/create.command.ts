@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { generateApiProject } from '../generators/api.generator.js';
 import { generateWebProject } from '../generators/web.generator.js';
 import { promptCreateProject } from '../prompts/create.prompt.js';
 import {
@@ -61,6 +62,20 @@ export const createCommand = new Command('create')
 
     if (config.projectType === 'express-api' || config.projectType === 'full-stack') {
       printInfo('API', config.apiDirectoryName);
+
+      await generateApiProject(config);
+
+      printSuccess(`${config.projectName} API created successfully.`);
+
+      printNextSteps([
+        `cd ${config.apiDirectoryName}`,
+        'npm install',
+        'Create .env from .env.example',
+        'npm run prisma:migrate',
+        'npm run dev',
+      ]);
+
+      return;
     }
 
     printSuccess('Project configuration ready.');
