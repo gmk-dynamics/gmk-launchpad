@@ -50,3 +50,6 @@ temp/
 # Local testing / generated projects
 test-output/
 generated/
+
+# npm package archives
+*.tgz
