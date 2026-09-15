@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ora from 'ora';
 import { API_DIRECTORIES } from '../shared/constants/api-template.constants.js';
+import { CLI_VERSION } from '../shared/constants/branding.constants.js';
 import {
   createProjectDirectories,
   ensureDirectoryDoesNotExist,
@@ -26,6 +27,7 @@ export const generateApiProject = async (config: CreateProjectConfig): Promise<v
       projectName: config.projectName,
       projectSlug: config.projectSlug,
       packageName: config.apiDirectoryName,
+      launchpadVersion: CLI_VERSION,
     };
 
     await copyTemplate(getApiTemplatePath(), destinationPath, variables);

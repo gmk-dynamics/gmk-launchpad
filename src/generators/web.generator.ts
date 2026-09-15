@@ -10,6 +10,7 @@ import {
 import { copyTemplate, type TemplateVariables } from '../shared/filesystem/template.filesystem.js';
 
 import chalk from 'chalk';
+import { CLI_VERSION } from '../shared/constants/branding.constants.js';
 import { WEB_DIRECTORIES } from '../shared/constants/web-template.constants.js';
 import type { CreateProjectConfig } from '../types/project.types.js';
 
@@ -29,6 +30,7 @@ export const generateWebProject = async (config: CreateProjectConfig): Promise<v
       projectName: config.projectName,
       projectSlug: config.projectSlug,
       packageName: config.webDirectoryName,
+      launchpadVersion: CLI_VERSION,
     };
 
     await copyTemplate(getWebTemplatePath(), destinationPath, variables);

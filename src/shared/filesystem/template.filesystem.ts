@@ -5,9 +5,13 @@ export interface TemplateVariables {
   projectName: string;
   projectSlug: string;
   packageName: string;
+  launchpadVersion: string;
 }
 
-const TEMPLATE_FILE_RENAMES = new Map<string, string>([['gitignore.template', '.gitignore']]);
+const TEMPLATE_FILE_RENAMES = new Map<string, string>([
+  ['gitignore.template', '.gitignore'],
+  ['gmk-launchpad.template.json', '.gmk-launchpad.json'],
+]);
 
 const TEMPLATE_DIRECTORY_RENAMES = new Map<string, string>([['vscode.template', '.vscode']]);
 
@@ -58,6 +62,9 @@ const getTemplateVariableValue = (variable: string, variables: TemplateVariables
 
     case 'PACKAGE_NAME':
       return variables.packageName;
+
+    case 'LAUNCHPAD_VERSION':
+      return variables.launchpadVersion;
 
     default:
       return `{{${variable}}}`;
