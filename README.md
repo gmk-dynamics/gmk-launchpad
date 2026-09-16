@@ -223,14 +223,33 @@ Automated module generation is planned through:
 gmk generate module <name>
 ```
 
-## Planned Feature Commands
+## Feature Commands
 
-Launchpad is being designed so capabilities can be added to existing generated projects without rebuilding them from scratch.
+Launchpad can add capabilities to existing generated projects without rebuilding them from scratch.
 
-Planned commands include:
+Docker support is currently available:
 
 ```bash
 gmk add docker
+```
+
+For web projects, this adds a production Nginx container configuration and `docker:build` / `docker:run` scripts.
+
+For API projects, this adds the API container plus a Docker Compose environment with PostgreSQL for local development. The generated scripts include `docker:build`, `docker:run`, `docker:up`, `docker:down`, `docker:logs`, and `docker:reset`.
+
+Before starting the API Compose environment, create the local Docker environment file from `.env.docker.example`, then run:
+
+```bash
+npm run docker:up
+```
+
+The PostgreSQL service persists data in a named Docker volume and exposes port `5433` by default to avoid colliding with a typical host PostgreSQL installation on `5432`.
+
+Launchpad identifies generated projects through `.gmk-launchpad.json` and can resolve the project root when commands are run from nested directories.
+
+AWS Cognito and AWS Lambda installers are planned through:
+
+```bash
 gmk add cognito
 gmk add lambda
 ```
@@ -310,15 +329,18 @@ Launchpad separates CLI concerns into focused layers:
 ```text
 src/
 ├── commands/
+├── features/
 ├── generators/
 ├── prompts/
 ├── shared/
 │   ├── constants/
 │   ├── filesystem/
 │   ├── logger/
+│   ├── project/
 │   └── utils/
 ├── templates/
 │   ├── api/
+│   ├── features/
 │   └── web/
 ├── types/
 └── cli.ts
@@ -338,11 +360,11 @@ Before the initial public release:
 - [x] GMK-branded CLI experience
 - [x] Project collision protection
 - [x] Generated project documentation
-- [ ] Docker integration
+- [x] Docker integration
 - [ ] AWS Cognito integration
 - [ ] AWS Lambda integration
 - [ ] Backend module generation
-- [ ] Package installation testing
+- [x] Package installation testing
 - [ ] Public npm release
 
 ## License
