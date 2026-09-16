@@ -38,7 +38,7 @@ Instead of generating generic starter projects that immediately require restruct
 
 GMK Launchpad is currently under active development.
 
-The initial public release is planned after the core project creation, feature installation, and code generation commands are complete.
+The core project creation, feature installation, and code generation commands are complete. Launchpad is now being prepared for its initial public npm release.
 
 ## CLI
 
@@ -209,6 +209,7 @@ Generated backend modules follow the GMK module structure:
 src/modules/example/
 ├── example.constants.ts
 ├── example.controller.ts
+├── example.mapper.ts
 ├── example.repository.ts
 ├── example.routes.ts
 ├── example.service.ts
@@ -217,11 +218,13 @@ src/modules/example/
 └── index.ts
 ```
 
-Automated module generation is planned through:
+Generate a module with:
 
 ```bash
 gmk generate module <name>
 ```
+
+For example, `gmk generate module sales-order` creates the complete module structure under `src/modules/sales-order/`. Module generation is available only in API projects.
 
 ## Feature Commands
 
@@ -247,18 +250,21 @@ The PostgreSQL service persists data in a named Docker volume and exposes port `
 
 Launchpad identifies generated projects through `.gmk-launchpad.json` and can resolve the project root when commands are run from nested directories.
 
-AWS Cognito and AWS Lambda installers are planned through:
+AWS Cognito integration is available for both web and API projects:
 
 ```bash
 gmk add cognito
+```
+
+For API projects, Launchpad adds Cognito JWT verification, authentication middleware, request typing, and the required environment variable placeholders. For web projects, it adds a Cognito authentication service and client configuration. Launchpad prepares the application integration only; it does not provision Cognito resources in AWS.
+
+AWS Lambda deployment support is available for API projects:
+
+```bash
 gmk add lambda
 ```
 
-Additional generators will use the same architecture:
-
-```bash
-gmk generate module client
-```
+This adds a basic Serverless Framework configuration and package/deploy/remove scripts around the existing `src/lambda.ts` handler. Project-specific infrastructure such as VPCs, RDS, S3, IAM policies, Route 53, and Secrets Manager remains intentionally outside Launchpad's automatic configuration.
 
 ## Development
 
@@ -341,6 +347,7 @@ src/
 ├── templates/
 │   ├── api/
 │   ├── features/
+│   ├── module/
 │   └── web/
 ├── types/
 └── cli.ts
@@ -361,9 +368,9 @@ Before the initial public release:
 - [x] Project collision protection
 - [x] Generated project documentation
 - [x] Docker integration
-- [ ] AWS Cognito integration
-- [ ] AWS Lambda integration
-- [ ] Backend module generation
+- [x] AWS Cognito integration
+- [x] AWS Lambda integration
+- [x] Backend module generation
 - [x] Package installation testing
 - [ ] Public npm release
 
