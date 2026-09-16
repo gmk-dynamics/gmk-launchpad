@@ -38,7 +38,9 @@ Instead of generating generic starter projects that immediately require restruct
 
 GMK Launchpad is currently under active development.
 
-The core project creation, feature installation, and code generation commands are complete. Launchpad is now being prepared for its initial public npm release.
+Version `0.1.0` completes the Foundation milestone. Development will continue through the `0.x` series, with `0.2.0` focused on generator improvements and `0.3.0` focused on project tooling.
+
+Launchpad will not be published to npm until the `1.0.0` milestone is complete.
 
 ## CLI
 
@@ -359,20 +361,44 @@ Generated projects are created from GMK-owned templates rather than delegating p
 
 ## Roadmap
 
-Before the initial public release:
+Launchpad follows Semantic Versioning throughout development. The `0.x` series is used to complete the planned pre-release milestones. Once the `0.3.0` scope is complete and stable, Launchpad will move to `1.0.0` for its first public npm release.
+
+### 0.1.0 — Foundation
 
 - [x] React + Vite project generation
-- [x] Express API project generation
-- [x] Full-stack project generation
-- [x] GMK-branded CLI experience
-- [x] Project collision protection
-- [x] Generated project documentation
-- [x] Docker integration
+- [x] Express + Prisma API generation
+- [x] Full-stack generation
+- [x] Docker support
+- [x] PostgreSQL Docker Compose
+- [x] AWS Lambda support
 - [x] AWS Cognito integration
-- [x] AWS Lambda integration
-- [x] Backend module generation
-- [x] Package installation testing
+- [x] API module generation
+- [x] Project metadata and feature detection
+
+### 0.2.0 — Generator Improvements
+
+- [ ] Optional module route registration
+- [ ] Additional generators based on real-world demand
+- [ ] Improved interactive generation
+
+### 0.3.0 — Project Tooling
+
+- [ ] Project diagnostics (`gmk doctor`)
+- [ ] Configuration helpers
+- [ ] Improved environment validation
+
+### 1.0.0 — Public Release
+
+- [ ] Final release QA
+- [ ] Dedicated GMK Launchpad documentation website
+- [ ] Final npm package metadata and documentation review
 - [ ] Public npm release
+
+### Future
+
+- [ ] Automated project migrations/upgrades
+- [ ] Plugin/extension architecture
+- [ ] Additional templates based on GMK projects
 
 ## License
 
