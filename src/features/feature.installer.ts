@@ -1,15 +1,18 @@
 import projectContextService from '../shared/project/project-context.service.js';
-import { installDockerFeature } from './docker/docker.installer.js';
-
 import type {
   LaunchpadFeature,
   LaunchpadProjectContext,
 } from '../types/launchpad-metadata.types.js';
+import { installCognitoFeature } from './cognito/cognito.installer.js';
+import { installDockerFeature } from './docker/docker.installer.js';
+import { installLambdaFeature } from './lambda/lambda.installer.js';
 
 type FeatureInstaller = (context: LaunchpadProjectContext) => Promise<void>;
 
-const FEATURE_INSTALLERS: Partial<Record<LaunchpadFeature, FeatureInstaller>> = {
+const FEATURE_INSTALLERS: Record<LaunchpadFeature, FeatureInstaller> = {
   docker: installDockerFeature,
+  cognito: installCognitoFeature,
+  lambda: installLambdaFeature,
 };
 
 export const installFeature = async (
@@ -17,10 +20,6 @@ export const installFeature = async (
   context: LaunchpadProjectContext,
 ): Promise<void> => {
   const installer = FEATURE_INSTALLERS[feature];
-
-  if (!installer) {
-    throw new Error(`The ${feature} installer has not been implemented yet.`);
-  }
 
   await installer(context);
 

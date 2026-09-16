@@ -1,0 +1,46 @@
+import { CognitoJwtVerifier } from "aws-jwt-verify";
+import type { NextFunction, Request, Response } from "express";
+import cognitoConfig from "../config/cognito.config.js";
+import AppError from "../shared/errors/app.error.js";
+
+const verifier = CognitoJwtVerifier.create({
+  userPoolId: cognitoConfig.userPoolId,
+  tokenUse: "access",
+  clientId: cognitoConfig.clientId,
+});
+
+const authenticate = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const authorization = req.headers.authorization;
+
+  if (!authorization || !authorization.startsWith("Bearer ")) {
+    next(new AppError("Authorization token is required.", 401));
+
+    return;
+  }
+
+  const token = authorization.slice("Bearer ".length).trim();
+
+  if (!token) {
+    next(new AppError("Authorization token is required.", 401));
+
+    return;
+  }
+
+  try {
+    req.auth = await verifier.verify(token);
+
+    next();
+  } catch {
+    next(new AppError("Invalid or expired authentication token.", 401));
+  }
+};
+
+const authenticationMiddleware = {
+  authenticate,
+};
+
+export default authenticationMiddleware;

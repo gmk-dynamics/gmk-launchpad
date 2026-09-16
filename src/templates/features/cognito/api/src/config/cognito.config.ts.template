@@ -1,0 +1,18 @@
+import "dotenv/config";
+
+const getRequiredEnvironmentVariable = (name: string): string => {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`${name} is required.`);
+  }
+
+  return value;
+};
+
+const cognitoConfig = {
+  userPoolId: getRequiredEnvironmentVariable("COGNITO_USER_POOL_ID"),
+  clientId: getRequiredEnvironmentVariable("COGNITO_CLIENT_ID"),
+};
+
+export default cognitoConfig;

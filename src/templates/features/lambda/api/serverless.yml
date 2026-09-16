@@ -1,0 +1,38 @@
+service: '{{PACKAGE_NAME}}'
+
+frameworkVersion: '4'
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  stage: ${opt:stage, 'dev'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+
+  httpApi:
+    cors: true
+
+  environment:
+    NODE_ENV: production
+    API_BASE_ROUTE: ${env:API_BASE_ROUTE, 'api'}
+    API_VERSION: ${env:API_VERSION, 'v1'}
+
+functions:
+  api:
+    handler: dist/lambda.handler
+
+    events:
+      - httpApi:
+          path: /
+          method: '*'
+
+      - httpApi:
+          path: /{proxy+}
+          method: '*'
+
+package:
+  patterns:
+    - '!src/**'
+    - '!coverage/**'
+    - '!*.log'

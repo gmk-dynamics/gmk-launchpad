@@ -1,0 +1,30 @@
+export interface CognitoConfig {
+  userPoolId: string;
+  clientId: string;
+}
+
+export const getCognitoConfig =
+  (): CognitoConfig => {
+    const userPoolId =
+      import.meta.env.VITE_COGNITO_USER_POOL_ID;
+
+    const clientId =
+      import.meta.env.VITE_COGNITO_CLIENT_ID;
+
+    if (!userPoolId) {
+      throw new Error(
+        'VITE_COGNITO_USER_POOL_ID is required.',
+      );
+    }
+
+    if (!clientId) {
+      throw new Error(
+        'VITE_COGNITO_CLIENT_ID is required.',
+      );
+    }
+
+    return {
+      userPoolId,
+      clientId,
+    };
+  };
