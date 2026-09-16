@@ -1,4 +1,5 @@
 import { input, select } from '@inquirer/prompts';
+import { normalizeProjectName } from '../shared/utils/project-name.utils.js';
 
 import type { ProjectType } from '../types/project.types.js';
 
@@ -16,6 +17,10 @@ export const promptCreateProject = async () => {
     validate: (value) => {
       if (!value.trim()) {
         return 'Project name is required.';
+      }
+
+      if (!normalizeProjectName(value)) {
+        return 'Project name must contain at least one letter or number.';
       }
 
       return true;

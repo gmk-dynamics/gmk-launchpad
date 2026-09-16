@@ -48,21 +48,17 @@ export const createCommand = new Command('create')
     if (config.projectType === 'react-vite') {
       printInfo('Web', config.webDirectoryName);
 
-      if (config.projectType === 'react-vite') {
-        await generateWebProject(config);
+      await generateWebProject(config);
 
-        printSuccess(`${config.projectName} created successfully.`);
+      printSuccess(`${config.projectName} created successfully.`);
 
-        printNextSteps([
-          {
-            commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
-          },
-        ]);
+      printNextSteps([
+        {
+          commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
+        },
+      ]);
 
-        return;
-      }
-
-      printSuccess('Project configuration ready.');
+      return;
     }
 
     if (config.projectType === 'express-api') {
@@ -76,8 +72,8 @@ export const createCommand = new Command('create')
         {
           commands: [
             `cd ${config.apiDirectoryName}`,
-            'npm install',
             'Create .env from .env.example',
+            'npm install',
             'npm run dev',
           ],
         },
@@ -86,29 +82,23 @@ export const createCommand = new Command('create')
       return;
     }
 
-    if (config.projectType === 'full-stack') {
-      await generateFullStackProject(config);
+    await generateFullStackProject(config);
 
-      printSuccess(`${config.projectName} full-stack project created successfully.`);
+    printSuccess(`${config.projectName} full-stack project created successfully.`);
 
-      printNextSteps([
-        {
-          title: 'Web',
-          commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
-        },
-        {
-          title: 'API',
-          commands: [
-            `cd ${config.apiDirectoryName}`,
-            'npm install',
-            'Create .env from .env.example',
-            'npm run dev',
-          ],
-        },
-      ]);
-
-      return;
-    }
-
-    printSuccess('Project configuration ready.');
+    printNextSteps([
+      {
+        title: 'Web',
+        commands: [`cd ${config.webDirectoryName}`, 'npm install', 'npm run dev'],
+      },
+      {
+        title: 'API',
+        commands: [
+          `cd ${config.apiDirectoryName}`,
+          'Create .env from .env.example',
+          'npm install',
+          'npm run dev',
+        ],
+      },
+    ]);
   });
