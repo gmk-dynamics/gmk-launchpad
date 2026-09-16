@@ -32,14 +32,15 @@
   },
   "scripts": {
     "dev": "tsx src/cli.ts",
-    "build": "tsc && node scripts/copy-templates.mjs",
+    "clean": "node scripts/clean-dist.mjs",
+    "build": "npm run clean && tsc && node scripts/copy-templates.mjs",
     "build:test": "tsc --noEmit",
     "start": "node dist/cli.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run lint && npm run format && npm run format:check && npm run build",
+    "check": "npm run lint && npm run format && npm run format:check && npm run build:test",
     "prepack": "npm run check"
   },
   "dependencies": {
