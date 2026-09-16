@@ -11,6 +11,7 @@ export interface TemplateVariables {
 const TEMPLATE_FILE_RENAMES = new Map<string, string>([
   ['gitignore.template', '.gitignore'],
   ['gmk-launchpad.template.json', '.gmk-launchpad.json'],
+  ['dockerignore.template', '.dockerignore'],
 ]);
 
 const TEMPLATE_DIRECTORY_RENAMES = new Map<string, string>([['vscode.template', '.vscode']]);
@@ -35,21 +36,26 @@ const TEXT_EXTENSIONS = new Set([
 ]);
 
 const TEXT_FILENAMES = new Set([
-  '.env',
-  '.env.example',
   '.gitignore',
   '.npmignore',
   '.prettierignore',
   '.prettierrc',
   'Dockerfile',
   'gitignore.template',
+  'dockerignore.template',
 ]);
+
+const isEnvironmentFile = (fileName: string): boolean => {
+  return fileName === '.env' || fileName.startsWith('.env.');
+};
 
 const isTextFile = (filePath: string): boolean => {
   const fileName = path.basename(filePath);
   const extension = path.extname(filePath);
 
-  return TEXT_FILENAMES.has(fileName) || TEXT_EXTENSIONS.has(extension);
+  return (
+    isEnvironmentFile(fileName) || TEXT_FILENAMES.has(fileName) || TEXT_EXTENSIONS.has(extension)
+  );
 };
 
 const getTemplateVariableValue = (variable: string, variables: TemplateVariables): string => {
@@ -92,47 +98,60 @@ const processTemplateFile = async (
   await fs.writeFile(filePath, processedContent, 'utf8');
 };
 
-const processDirectory = async (
-  directoryPath: string,
+const processCopiedDirectory = async (
+  templatePath: string,
+  destinationPath: string,
   variables: TemplateVariables,
 ): Promise<void> => {
-  const entries = await fs.readdir(directoryPath, {
+  const entries = await fs.readdir(templatePath, {
     withFileTypes: true,
   });
 
   for (const entry of entries) {
-    const entryPath = path.join(directoryPath, entry.name);
+    const templateEntryPath = path.join(templatePath, entry.name);
+    const destinationEntryPath = path.join(destinationPath, entry.name);
 
     if (entry.isDirectory()) {
-      await processDirectory(entryPath, variables);
+      await processCopiedDirectory(templateEntryPath, destinationEntryPath, variables);
       continue;
     }
 
     if (entry.isFile()) {
-      await processTemplateFile(entryPath, variables);
+      await processTemplateFile(destinationEntryPath, variables);
     }
   }
 };
 
-const renameTemplateArtifacts = async (directoryPath: string): Promise<void> => {
+const renameTemplateArtifacts = async (
+  templatePath: string,
+  destinationPath: string,
+): Promise<void> => {
   for (const [sourceName, destinationName] of TEMPLATE_FILE_RENAMES) {
-    const sourcePath = path.join(directoryPath, sourceName);
+    const templateSourcePath = path.join(templatePath, sourceName);
 
-    if (await fs.pathExists(sourcePath)) {
-      await fs.move(sourcePath, path.join(directoryPath, destinationName), {
-        overwrite: true,
-      });
+    if (!(await fs.pathExists(templateSourcePath))) {
+      continue;
     }
+
+    const sourcePath = path.join(destinationPath, sourceName);
+
+    await fs.move(sourcePath, path.join(destinationPath, destinationName), {
+      overwrite: true,
+    });
   }
 
   for (const [sourceName, destinationName] of TEMPLATE_DIRECTORY_RENAMES) {
-    const sourcePath = path.join(directoryPath, sourceName);
+    const templateSourcePath = path.join(templatePath, sourceName);
 
-    if (await fs.pathExists(sourcePath)) {
-      await fs.move(sourcePath, path.join(directoryPath, destinationName), {
-        overwrite: true,
-      });
+    if (!(await fs.pathExists(templateSourcePath))) {
+      continue;
     }
+
+    const sourcePath = path.join(destinationPath, sourceName);
+
+    await fs.move(sourcePath, path.join(destinationPath, destinationName), {
+      overwrite: true,
+    });
   }
 };
 
@@ -143,7 +162,7 @@ export const copyTemplate = async (
 ): Promise<void> => {
   await fs.copy(templatePath, destinationPath);
 
-  await processDirectory(destinationPath, variables);
+  await processCopiedDirectory(templatePath, destinationPath, variables);
 
-  await renameTemplateArtifacts(destinationPath);
+  await renameTemplateArtifacts(templatePath, destinationPath);
 };

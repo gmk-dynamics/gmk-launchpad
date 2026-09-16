@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-
+import { addCommand } from './commands/add.command.js';
 import { createCommand } from './commands/create.command.js';
+import { CLI_VERSION } from './shared/constants/branding.constants.js';
 import { printBanner, printCancelled, printError } from './shared/logger/console.logger.js';
 
 const program = new Command();
 
 printBanner();
 
-program.name('gmk').description('GMK Launchpad project scaffolding CLI').version('0.1.0');
+program.name('gmk').description('GMK Launchpad project scaffolding CLI').version(CLI_VERSION);
 
 program.addCommand(createCommand);
+program.addCommand(addCommand);
 
 try {
   await program.parseAsync(process.argv);

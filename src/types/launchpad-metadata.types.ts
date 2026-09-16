@@ -8,3 +8,9 @@ export interface LaunchpadMetadata {
   projectType: LaunchpadProjectType;
   features: LaunchpadFeature[];
 }
+
+export interface LaunchpadProjectContext {
+  rootPath: string;
+  metadataPath: string;
+  metadata: LaunchpadMetadata;
+}
