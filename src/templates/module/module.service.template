@@ -1,0 +1,5 @@
+const {{MODULE_CAMEL_NAME}}Service = {
+  // Add business logic here.
+};
+
+export default {{MODULE_CAMEL_NAME}}Service;

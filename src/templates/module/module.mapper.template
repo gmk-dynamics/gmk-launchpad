@@ -1,0 +1,5 @@
+const {{MODULE_CAMEL_NAME}}Mapper = {
+  // Add mapping methods here.
+};
+
+export default {{MODULE_CAMEL_NAME}}Mapper;

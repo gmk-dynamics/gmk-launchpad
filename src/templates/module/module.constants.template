@@ -1,0 +1,2 @@
+export const {{MODULE_CONSTANT_NAME}}_MODULE_NAME =
+  '{{MODULE_NAME}}';

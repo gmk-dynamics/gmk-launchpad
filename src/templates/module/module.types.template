@@ -1,0 +1,1 @@
+export type {{MODULE_PASCAL_NAME}}Id = string;

@@ -1,0 +1,5 @@
+const {{MODULE_CAMEL_NAME}}Controller = {
+  // Add request handlers here.
+};
+
+export default {{MODULE_CAMEL_NAME}}Controller;

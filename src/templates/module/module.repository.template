@@ -1,0 +1,5 @@
+const {{MODULE_CAMEL_NAME}}Repository = {
+  // Add persistence methods here.
+};
+
+export default {{MODULE_CAMEL_NAME}}Repository;

@@ -1,0 +1,27 @@
+export * from './{{MODULE_NAME}}.constants.js';
+export * from './{{MODULE_NAME}}.types.js';
+export * from './{{MODULE_NAME}}.validation.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Controller,
+} from './{{MODULE_NAME}}.controller.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Mapper,
+} from './{{MODULE_NAME}}.mapper.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Repository,
+} from './{{MODULE_NAME}}.repository.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Router,
+} from './{{MODULE_NAME}}.routes.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Service,
+} from './{{MODULE_NAME}}.service.js';
+
+export {
+  default as {{MODULE_CAMEL_NAME}}Validation,
+} from './{{MODULE_NAME}}.validation.js';

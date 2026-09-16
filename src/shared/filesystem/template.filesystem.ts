@@ -6,6 +6,10 @@ export interface TemplateVariables {
   projectSlug: string;
   packageName: string;
   launchpadVersion: string;
+  moduleName?: string;
+  moduleCamelName?: string;
+  modulePascalName?: string;
+  moduleConstantName?: string;
 }
 
 const TEMPLATE_FILE_RENAMES = new Map<string, string>([
@@ -33,6 +37,7 @@ const TEXT_EXTENSIONS = new Set([
   '.txt',
   '.yaml',
   '.yml',
+  '.template',
 ]);
 
 const TEXT_FILENAMES = new Set([
@@ -71,6 +76,18 @@ const getTemplateVariableValue = (variable: string, variables: TemplateVariables
 
     case 'LAUNCHPAD_VERSION':
       return variables.launchpadVersion;
+
+    case 'MODULE_NAME':
+      return variables.moduleName ?? `{{${variable}}}`;
+
+    case 'MODULE_CAMEL_NAME':
+      return variables.moduleCamelName ?? `{{${variable}}}`;
+
+    case 'MODULE_PASCAL_NAME':
+      return variables.modulePascalName ?? `{{${variable}}}`;
+
+    case 'MODULE_CONSTANT_NAME':
+      return variables.moduleConstantName ?? `{{${variable}}}`;
 
     default:
       return `{{${variable}}}`;

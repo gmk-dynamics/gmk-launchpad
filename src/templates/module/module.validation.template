@@ -1,0 +1,11 @@
+import { z } from 'zod';
+
+export const {{MODULE_CAMEL_NAME}}IdSchema = z
+  .string()
+  .min(1);
+
+const {{MODULE_CAMEL_NAME}}Validation = {
+  {{MODULE_CAMEL_NAME}}IdSchema,
+};
+
+export default {{MODULE_CAMEL_NAME}}Validation;

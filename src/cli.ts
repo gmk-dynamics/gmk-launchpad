@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import { addCommand } from './commands/add.command.js';
 import { createCommand } from './commands/create.command.js';
+import { generateCommand } from './commands/generate.command.js';
 import { CLI_VERSION } from './shared/constants/branding.constants.js';
 import { printBanner, printCancelled, printError } from './shared/logger/console.logger.js';
 
@@ -14,6 +15,7 @@ program.name('gmk').description('GMK Launchpad project scaffolding CLI').version
 
 program.addCommand(createCommand);
 program.addCommand(addCommand);
+program.addCommand(generateCommand);
 
 try {
   await program.parseAsync(process.argv);

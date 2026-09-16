@@ -1,0 +1,7 @@
+import { Router } from 'express';
+
+const {{MODULE_CAMEL_NAME}}Router = Router();
+
+// Register {{MODULE_NAME}} routes here.
+
+export default {{MODULE_CAMEL_NAME}}Router;
