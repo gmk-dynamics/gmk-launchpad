@@ -30,6 +30,18 @@
   "engines": {
     "node": ">=20"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmk-dynamics/gmk-launchpad.git"
+  },
+  "homepage": "https://github.com/gmk-dynamics/gmk-launchpad#readme",
+  "bugs": {
+    "url": "https://github.com/gmk-dynamics/gmk-launchpad/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "tsx src/cli.ts",
     "clean": "node scripts/clean-dist.mjs",
@@ -41,7 +53,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run lint && npm run format && npm run format:check && npm run build:test",
-    "prepack": "npm run check"
+    "prepack": "npm run check && npm run build"
   },
   "dependencies": {
     "@inquirer/prompts": "^8.7.2",
