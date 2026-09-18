@@ -1,0 +1,21 @@
+import { useContext } from 'react';
+import {{ARTIFACT_PASCAL_NAME}}Context, {
+  type {{ARTIFACT_PASCAL_NAME}}ContextValue,
+} from '@shared/contexts/{{ARTIFACT_NAME}}.context';
+
+const use{{ARTIFACT_PASCAL_NAME}} =
+  (): {{ARTIFACT_PASCAL_NAME}}ContextValue => {
+    const context = useContext(
+      {{ARTIFACT_PASCAL_NAME}}Context,
+    );
+
+    if (!context) {
+      throw new Error(
+        'use{{ARTIFACT_PASCAL_NAME}} must be used within a {{ARTIFACT_PASCAL_NAME}}Provider.',
+      );
+    }
+
+    return context;
+  };
+
+export default use{{ARTIFACT_PASCAL_NAME}};

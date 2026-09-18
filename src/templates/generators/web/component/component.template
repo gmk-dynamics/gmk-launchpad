@@ -1,0 +1,11 @@
+import React from 'react';
+
+const {{ARTIFACT_PASCAL_NAME}}: React.FC = () => {
+  return (
+    <div>
+      {/* Add {{ARTIFACT_PASCAL_NAME}} UI here. */}
+    </div>
+  );
+};
+
+export default {{ARTIFACT_PASCAL_NAME}};

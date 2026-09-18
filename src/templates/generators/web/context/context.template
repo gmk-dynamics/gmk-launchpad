@@ -1,0 +1,11 @@
+import { createContext } from 'react';
+
+export type {{ARTIFACT_PASCAL_NAME}}ContextValue =
+  Record<string, unknown>;
+
+const {{ARTIFACT_PASCAL_NAME}}Context =
+  createContext<
+    {{ARTIFACT_PASCAL_NAME}}ContextValue | undefined
+  >(undefined);
+
+export default {{ARTIFACT_PASCAL_NAME}}Context;

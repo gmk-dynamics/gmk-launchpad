@@ -1,0 +1,5 @@
+const {{ARTIFACT_CAMEL_NAME}}Service = {
+  // Add service methods here.
+};
+
+export default {{ARTIFACT_CAMEL_NAME}}Service;

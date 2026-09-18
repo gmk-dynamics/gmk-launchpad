@@ -1,0 +1,11 @@
+import React from 'react';
+
+const {{ARTIFACT_PASCAL_NAME}}Page: React.FC = () => {
+  return (
+    <main>
+      {/* Add {{ARTIFACT_PASCAL_NAME}} page UI here. */}
+    </main>
+  );
+};
+
+export default {{ARTIFACT_PASCAL_NAME}}Page;

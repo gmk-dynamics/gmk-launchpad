@@ -1,0 +1,26 @@
+import React from 'react';
+import {{ARTIFACT_PASCAL_NAME}}Context, {
+  type {{ARTIFACT_PASCAL_NAME}}ContextValue,
+} from '@shared/contexts/{{ARTIFACT_NAME}}.context';
+
+interface {{ARTIFACT_PASCAL_NAME}}ProviderProps
+  extends React.PropsWithChildren {
+  value: {{ARTIFACT_PASCAL_NAME}}ContextValue;
+}
+
+const {{ARTIFACT_PASCAL_NAME}}Provider: React.FC<
+  {{ARTIFACT_PASCAL_NAME}}ProviderProps
+> = ({
+  children,
+  value,
+}) => {
+  return (
+    <{{ARTIFACT_PASCAL_NAME}}Context.Provider
+      value={value}
+    >
+      {children}
+    </{{ARTIFACT_PASCAL_NAME}}Context.Provider>
+  );
+};
+
+export default {{ARTIFACT_PASCAL_NAME}}Provider;
