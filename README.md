@@ -38,7 +38,9 @@ Instead of generating generic starter projects that immediately require restruct
 
 GMK Launchpad is currently under active development.
 
-Version `0.1.0` completes the Foundation milestone. Development will continue through the `0.x` series, with `0.2.0` focused on generator improvements and `0.3.0` focused on project tooling.
+Version `0.2.0` completes the **Generator Improvements** milestone, adding project-aware code generation for both web and API projects, interactive generation workflows, context bundles, component categories, and optional route registration.
+
+The next milestone, `0.3.0`, will focus on project tooling, environment validation, and configuration helpers.
 
 Launchpad will not be published to npm until the `1.0.0` milestone is complete.
 
@@ -97,11 +99,13 @@ with:
 - Vite
 - TypeScript
 - Tailwind CSS
+- React Router
 - ESLint
 - Prettier
 - Path aliases
 - GMK project structure
 - Development and validation scripts
+- GMK Launchpad starter landing page
 - Branded project documentation
 
 ### Express API
@@ -158,6 +162,11 @@ src/
 ├── services/
 ├── shared/
 │   ├── components/
+│   │   ├── ui/
+│   │   ├── layout/
+│   │   ├── navigation/
+│   │   ├── modals/
+│   │   └── forms/
 │   ├── constants/
 │   ├── containers/
 │   ├── contexts/
@@ -170,6 +179,8 @@ src/
 │   └── utils/
 └── types/
 ```
+
+New web projects include a starter landing page registered at `/`, with React Router wired through the application template.
 
 ## Generated API Structure
 
@@ -185,6 +196,7 @@ src/
 ├── shared/
 │   ├── constants/
 │   ├── errors/
+│   ├── services/
 │   ├── types/
 │   └── utils/
 ├── types/
@@ -203,9 +215,130 @@ lambda.ts ──┘
 
 This allows the same application to run through a standard Node.js process or an AWS Lambda handler without restructuring application code.
 
-## Backend Module Convention
+## Code Generation
 
-Generated backend modules follow the GMK module structure:
+Launchpad can generate application code inside existing GMK Launchpad projects.
+
+Run the project-aware interactive generator:
+
+```bash
+gmk generate
+```
+
+Launchpad detects whether the current project is a web or API project and presents only the relevant generators.
+
+Direct commands remain available for scripting and automation.
+
+### Web Generators
+
+```bash
+gmk generate component <name> --type <type>
+gmk generate page <name>
+gmk generate service <name>
+gmk generate context <name>
+gmk generate provider <name>
+gmk generate hook <name>
+```
+
+#### Components
+
+Supported component types:
+
+```text
+ui
+layout
+navigation
+modals
+forms
+```
+
+For example:
+
+```bash
+gmk generate component navbar --type navigation
+```
+
+generates:
+
+```text
+src/shared/components/navigation/navbar/
+├── navbar.component.tsx
+└── index.ts
+```
+
+Generated React `.tsx` artifacts follow the GMK Launchpad React component convention using `React.FC`.
+
+#### Pages
+
+Generate a page with:
+
+```bash
+gmk generate page dashboard
+```
+
+which creates:
+
+```text
+src/pages/dashboard/
+├── dashboard.page.tsx
+└── index.ts
+```
+
+Pages can optionally be registered with React Router:
+
+```bash
+gmk generate page dashboard --route /dashboard
+```
+
+The interactive generator can also ask whether the page should be registered automatically.
+
+#### Services
+
+Generate a frontend service with:
+
+```bash
+gmk generate service invoices
+```
+
+which creates:
+
+```text
+src/services/invoices.service.ts
+```
+
+#### Context Bundles
+
+Context, provider, and hook generation operate as a single bundle.
+
+Any of these commands:
+
+```bash
+gmk generate context auth
+gmk generate provider auth
+gmk generate hook auth
+```
+
+generate:
+
+```text
+src/shared/contexts/auth.context.ts
+src/shared/providers/auth.provider.tsx
+src/shared/hooks/use-auth.hook.ts
+```
+
+Inputs such as `auth`, `AuthContext`, `auth-provider`, `use-auth`, and `useAuth` are normalized to the same bundle name.
+
+### API Generators
+
+```bash
+gmk generate module <name>
+gmk generate middleware <name>
+gmk generate service <name>
+```
+
+#### Modules
+
+Generated backend modules follow the GMK nine-file module convention:
 
 ```text
 src/modules/example/
@@ -223,16 +356,52 @@ src/modules/example/
 Generate a module with:
 
 ```bash
-gmk generate module <name>
+gmk generate module sales-order
 ```
 
-For example, `gmk generate module sales-order` creates the complete module structure under `src/modules/sales-order/`. Module generation is available only in API projects.
+Modules can optionally register their router automatically:
+
+```bash
+gmk generate module client --route /clients
+```
+
+The interactive generator can also ask whether the module router should be registered.
+
+#### Middleware
+
+Generate API middleware with:
+
+```bash
+gmk generate middleware request-id
+```
+
+which creates:
+
+```text
+src/middlewares/request-id.middleware.ts
+```
+
+#### Services
+
+Generate a shared API service with:
+
+```bash
+gmk generate service email
+```
+
+which creates:
+
+```text
+src/shared/services/email.service.ts
+```
 
 ## Feature Commands
 
 Launchpad can add capabilities to existing generated projects without rebuilding them from scratch.
 
-Docker support is currently available:
+### Docker
+
+Add Docker support with:
 
 ```bash
 gmk add docker
@@ -250,7 +419,7 @@ npm run docker:up
 
 The PostgreSQL service persists data in a named Docker volume and exposes port `5433` by default to avoid colliding with a typical host PostgreSQL installation on `5432`.
 
-Launchpad identifies generated projects through `.gmk-launchpad.json` and can resolve the project root when commands are run from nested directories.
+### AWS Cognito
 
 AWS Cognito integration is available for both web and API projects:
 
@@ -258,7 +427,13 @@ AWS Cognito integration is available for both web and API projects:
 gmk add cognito
 ```
 
-For API projects, Launchpad adds Cognito JWT verification, authentication middleware, request typing, and the required environment variable placeholders. For web projects, it adds a Cognito authentication service and client configuration. Launchpad prepares the application integration only; it does not provision Cognito resources in AWS.
+For API projects, Launchpad adds Cognito JWT verification, authentication middleware, request typing, and the required environment variable placeholders.
+
+For web projects, Launchpad adds a Cognito authentication service and client configuration.
+
+Launchpad prepares the application integration only; it does not provision Cognito resources in AWS.
+
+### AWS Lambda
 
 AWS Lambda deployment support is available for API projects:
 
@@ -266,7 +441,21 @@ AWS Lambda deployment support is available for API projects:
 gmk add lambda
 ```
 
-This adds a basic Serverless Framework configuration and package/deploy/remove scripts around the existing `src/lambda.ts` handler. Project-specific infrastructure such as VPCs, RDS, S3, IAM policies, Route 53, and Secrets Manager remains intentionally outside Launchpad's automatic configuration.
+This adds a basic Serverless Framework configuration and package/deploy/remove scripts around the existing `src/lambda.ts` handler.
+
+Project-specific infrastructure such as VPCs, RDS, S3, IAM policies, Route 53, and Secrets Manager remains intentionally outside Launchpad's automatic configuration.
+
+## Project Metadata
+
+Launchpad identifies generated projects through:
+
+```text
+.gmk-launchpad.json
+```
+
+The CLI can resolve the project root when commands are run from nested directories.
+
+Project metadata tracks the Launchpad schema version, the version used to generate the project, the project type, and installed Launchpad features.
 
 ## Development
 
@@ -292,6 +481,12 @@ Validate the project:
 
 ```bash
 npm run check
+```
+
+Format the codebase:
+
+```bash
+npm run format
 ```
 
 ## Local CLI Testing
@@ -322,13 +517,21 @@ npm unlink -g @gmkdynamics/launchpad
 
 ## Package Testing
 
-Before public release, Launchpad can be packaged locally using:
+Launchpad is not published to npm during the `0.x` development series.
+
+Create a local package archive with:
 
 ```bash
 npm pack
 ```
 
-This produces a `.tgz` archive that can be installed elsewhere to test the exact package contents without publishing to npm.
+This produces a `.tgz` archive containing the distributable package and can be installed on another machine to test the exact package contents without publishing to npm.
+
+Inspect the package contents without creating the final archive:
+
+```bash
+npm pack --dry-run
+```
 
 ## Architecture
 
@@ -349,6 +552,7 @@ src/
 ├── templates/
 │   ├── api/
 │   ├── features/
+│   ├── generators/
 │   ├── module/
 │   └── web/
 ├── types/
@@ -361,13 +565,15 @@ Generated projects are created from GMK-owned templates rather than delegating p
 
 ## Roadmap
 
-Launchpad follows Semantic Versioning throughout development. The `0.x` series is used to complete the planned pre-release milestones. Once the `0.3.0` scope is complete and stable, Launchpad will move to `1.0.0` for its first public npm release.
+Launchpad follows Semantic Versioning throughout development. The `0.x` series is used to complete the planned pre-release milestones.
+
+Launchpad will move to `1.0.0` for its first public npm release after the planned pre-release milestones are complete and stable.
 
 ### 0.1.0 — Foundation
 
 - [x] React + Vite project generation
 - [x] Express + Prisma API generation
-- [x] Full-stack generation
+- [x] Full-stack project generation
 - [x] Docker support
 - [x] PostgreSQL Docker Compose
 - [x] AWS Lambda support
@@ -377,9 +583,18 @@ Launchpad follows Semantic Versioning throughout development. The `0.x` series i
 
 ### 0.2.0 — Generator Improvements
 
-- [ ] Optional module route registration
-- [ ] Additional generators based on real-world demand
-- [ ] Improved interactive generation
+- [x] API middleware generation
+- [x] API shared service generation
+- [x] Web component generation
+- [x] Web component categories
+- [x] Web page generation
+- [x] Web service generation
+- [x] Context, provider, and hook bundle generation
+- [x] Project-aware interactive generation
+- [x] Optional API module route registration
+- [x] React Router web foundation
+- [x] Optional web page route registration
+- [x] GMK Launchpad starter landing page
 
 ### 0.3.0 — Project Tooling
 
@@ -396,8 +611,8 @@ Launchpad follows Semantic Versioning throughout development. The `0.x` series i
 
 ### Future
 
-- [ ] Automated project migrations/upgrades
-- [ ] Plugin/extension architecture
+- [ ] Automated project migrations and upgrades
+- [ ] Plugin and extension architecture
 - [ ] Additional templates based on GMK projects
 
 ## License
