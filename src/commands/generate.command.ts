@@ -1,5 +1,4 @@
 import { Command } from 'commander';
-
 import { generateComponent } from '../generators/component.generator.js';
 import { generateContextBundle } from '../generators/context.generator.js';
 import { generateMiddleware } from '../generators/middleware.generator.js';
@@ -10,41 +9,91 @@ import {
   promptComponentCategory,
   promptGeneratorName,
   promptGeneratorType,
+  promptRoutePath,
+  promptRouteRegistration,
 } from '../prompts/generate.prompt.js';
 import type { WebComponentCategory } from '../shared/constants/generator.constants.js';
 import { isWebComponentCategory } from '../shared/constants/generator.constants.js';
 import { printInfo, printSection, printSuccess } from '../shared/logger/console.logger.js';
+import {
+  registerModuleRoute,
+  validateModuleRouteRegistration,
+} from '../shared/project/module-route.service.js';
+import {
+  registerPageRoute,
+  validatePageRouteRegistration,
+} from '../shared/project/page-route.service.js';
 import projectContextService from '../shared/project/project-context.service.js';
 import {
   normalizeContextBundleName,
   normalizeGeneratorName,
 } from '../shared/utils/generator-name.utils.js';
 import { normalizeModuleName } from '../shared/utils/module-name.utils.js';
+import { normalizePageRoutePath, normalizeRoutePath } from '../shared/utils/route.utils.js';
 
 const moduleCommand = new Command('module')
   .description('Generate an API module')
   .argument('<name>', 'Module name')
-  .action(async (requestedName: string) => {
-    const context = await projectContextService.getProjectContext();
+  .option('-r, --route <path>', 'Register the module router at a route')
+  .action(
+    async (
+      requestedName: string,
+      options: {
+        route?: string;
+      },
+    ) => {
+      const context = await projectContextService.getProjectContext();
 
-    if (context.metadata.projectType !== 'api') {
-      throw new Error('Modules can only be generated in API projects.');
-    }
+      if (context.metadata.projectType !== 'api') {
+        throw new Error('Modules can only be generated in API projects.');
+      }
 
-    const moduleName = normalizeModuleName(requestedName);
+      const moduleName = normalizeModuleName(requestedName);
 
-    printSection('Module Generation');
+      let routePath: string | undefined;
 
-    printInfo('Project', 'API');
-    printInfo('Module', moduleName.slug);
-    printInfo('Root', context.rootPath);
+      if (options.route) {
+        routePath = normalizeRoutePath(options.route);
 
-    const modulePath = await generateModule(context, moduleName);
+        await validateModuleRouteRegistration({
+          projectRoot: context.rootPath,
+          moduleSlug: moduleName.slug,
+          moduleCamelName: moduleName.camelCase,
+          routePath,
+        });
+      }
 
-    printSuccess(`${moduleName.pascalCase} module generated successfully.`);
+      printSection('Module Generation');
 
-    printInfo('Created', modulePath);
-  });
+      printInfo('Project', 'API');
+      printInfo('Module', moduleName.slug);
+
+      if (routePath) {
+        printInfo('Route', routePath);
+      }
+
+      printInfo('Root', context.rootPath);
+
+      const modulePath = await generateModule(context, moduleName);
+
+      if (routePath) {
+        await registerModuleRoute({
+          projectRoot: context.rootPath,
+          moduleSlug: moduleName.slug,
+          moduleCamelName: moduleName.camelCase,
+          routePath,
+        });
+      }
+
+      printSuccess(`${moduleName.pascalCase} module generated successfully.`);
+
+      if (routePath) {
+        printSuccess(`Router registered at ${routePath}.`);
+      }
+
+      printInfo('Created', modulePath);
+    },
+  );
 
 const middlewareCommand = new Command('middleware')
   .description('Generate an API middleware')
@@ -132,25 +181,65 @@ const componentCommand = new Command('component')
 const pageCommand = new Command('page')
   .description('Generate a React page')
   .argument('<name>', 'Page name')
-  .action(async (requestedName: string) => {
-    const context = await projectContextService.getProjectContext();
+  .option('-r, --route <path>', 'Register the page at a route')
+  .action(
+    async (
+      requestedName: string,
+      options: {
+        route?: string;
+      },
+    ) => {
+      const context = await projectContextService.getProjectContext();
 
-    if (context.metadata.projectType !== 'web') {
-      throw new Error('Pages can only be generated in web projects.');
-    }
+      if (context.metadata.projectType !== 'web') {
+        throw new Error('Pages can only be generated in web projects.');
+      }
 
-    const pageName = normalizeGeneratorName(requestedName, ['page']);
+      const pageName = normalizeGeneratorName(requestedName, ['page']);
 
-    printSection('Page Generation');
+      let routePath: string | undefined;
 
-    printInfo('Project', 'Web');
-    printInfo('Page', pageName.slug);
-    printInfo('Root', context.rootPath);
+      if (options.route) {
+        routePath = normalizePageRoutePath(options.route);
 
-    await generatePage(context, pageName);
+        await validatePageRouteRegistration({
+          projectRoot: context.rootPath,
+          pageSlug: pageName.slug,
+          pagePascalName: pageName.pascalCase,
+          routePath,
+        });
+      }
 
-    printSuccess(`${pageName.pascalCase} page generated successfully.`);
-  });
+      printSection('Page Generation');
+
+      printInfo('Project', 'Web');
+
+      printInfo('Page', pageName.slug);
+
+      if (routePath) {
+        printInfo('Route', routePath);
+      }
+
+      printInfo('Root', context.rootPath);
+
+      await generatePage(context, pageName);
+
+      if (routePath) {
+        await registerPageRoute({
+          projectRoot: context.rootPath,
+          pageSlug: pageName.slug,
+          pagePascalName: pageName.pascalCase,
+          routePath,
+        });
+      }
+
+      printSuccess(`${pageName.pascalCase} page generated successfully.`);
+
+      if (routePath) {
+        printSuccess(`Page registered at ${routePath}.`);
+      }
+    },
+  );
 
 type ContextBundleCommandName = 'context' | 'provider' | 'hook';
 
@@ -198,15 +287,50 @@ export const generateCommand = new Command('generate')
       case 'module': {
         const moduleName = normalizeModuleName(requestedName);
 
+        let routePath: string | undefined;
+
+        const shouldRegisterRoute = await promptRouteRegistration();
+
+        if (shouldRegisterRoute) {
+          const requestedRoute = await promptRoutePath(`/${moduleName.slug}s`);
+
+          routePath = normalizeRoutePath(requestedRoute);
+
+          await validateModuleRouteRegistration({
+            projectRoot: context.rootPath,
+            moduleSlug: moduleName.slug,
+            moduleCamelName: moduleName.camelCase,
+            routePath,
+          });
+        }
+
         printSection('Module Generation');
 
         printInfo('Project', 'API');
         printInfo('Module', moduleName.slug);
+
+        if (routePath) {
+          printInfo('Route', routePath);
+        }
+
         printInfo('Root', context.rootPath);
 
         await generateModule(context, moduleName);
 
+        if (routePath) {
+          await registerModuleRoute({
+            projectRoot: context.rootPath,
+            moduleSlug: moduleName.slug,
+            moduleCamelName: moduleName.camelCase,
+            routePath,
+          });
+        }
+
         printSuccess(`${moduleName.pascalCase} module generated successfully.`);
+
+        if (routePath) {
+          printSuccess(`Router registered at ${routePath}.`);
+        }
 
         return;
       }
@@ -235,7 +359,6 @@ export const generateCommand = new Command('generate')
         printInfo('Project', context.metadata.projectType === 'api' ? 'API' : 'Web');
 
         printInfo('Service', serviceName.slug);
-
         printInfo('Root', context.rootPath);
 
         await generateService(context, serviceName);
@@ -267,15 +390,51 @@ export const generateCommand = new Command('generate')
       case 'page': {
         const pageName = normalizeGeneratorName(requestedName, ['page']);
 
+        let routePath: string | undefined;
+
+        const shouldRegisterRoute = await promptRouteRegistration();
+
+        if (shouldRegisterRoute) {
+          const requestedRoute = await promptRoutePath(`/${pageName.slug}`);
+
+          routePath = normalizePageRoutePath(requestedRoute);
+
+          await validatePageRouteRegistration({
+            projectRoot: context.rootPath,
+            pageSlug: pageName.slug,
+            pagePascalName: pageName.pascalCase,
+            routePath,
+          });
+        }
+
         printSection('Page Generation');
 
         printInfo('Project', 'Web');
+
         printInfo('Page', pageName.slug);
+
+        if (routePath) {
+          printInfo('Route', routePath);
+        }
+
         printInfo('Root', context.rootPath);
 
         await generatePage(context, pageName);
 
+        if (routePath) {
+          await registerPageRoute({
+            projectRoot: context.rootPath,
+            pageSlug: pageName.slug,
+            pagePascalName: pageName.pascalCase,
+            routePath,
+          });
+        }
+
         printSuccess(`${pageName.pascalCase} page generated successfully.`);
+
+        if (routePath) {
+          printSuccess(`Page registered at ${routePath}.`);
+        }
 
         return;
       }

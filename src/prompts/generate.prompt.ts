@@ -1,4 +1,4 @@
-import { input, select } from '@inquirer/prompts';
+import { confirm, input, select } from '@inquirer/prompts';
 import {
   WEB_COMPONENT_CATEGORIES,
   type WebComponentCategory,
@@ -133,4 +133,25 @@ const getGeneratorLabel = (type: GeneratorType): string => {
     default:
       return 'Artifact';
   }
+};
+
+export const promptRouteRegistration = async (): Promise<boolean> => {
+  return confirm({
+    message: 'Register this route automatically?',
+    default: true,
+  });
+};
+
+export const promptRoutePath = async (defaultPath: string): Promise<string> => {
+  return input({
+    message: 'Route path:',
+    default: defaultPath,
+    validate: (value) => {
+      if (!value.trim()) {
+        return 'Route path is required.';
+      }
+
+      return true;
+    },
+  });
 };
