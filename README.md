@@ -1,31 +1,19 @@
 <div align="center">
+  <a href="https://gmkdynamics.com">
+    <img src="https://static.gmkdynamics.com/general/gmk-logo-red.webp" alt="GMK Dynamics" width="300" />
+  </a>
 
-<a href="https://gmkdynamics.com">
-
-  <img
-
-    src="https://static.gmkdynamics.com/general/gmk-logo-red.webp"
-
-    alt="GMK Dynamics"
-
-    width="300"
-
-  />
-
-</a>
-
-<br />
+  <br />
 
 # GMK Launchpad
 
 Opinionated project scaffolding for modern web applications and APIs.
 
-Built by ****GMK Dynamics****.
+Built by **GMK Dynamics**.
 
-<br />
+  <br />
 
 [GMK Dynamics](https://gmkdynamics.com)
-
 </div>
 
 ---
