@@ -32,15 +32,15 @@ It provides production-oriented application scaffolding based on the conventions
 
 Launchpad is intentionally opinionated.
 
-Instead of generating generic starter projects that immediately require restructuring, it creates applications with predefined tooling, folder structures, scripts, configuration, and development conventions.
+Instead of generating generic starter projects that immediately require restructuring, it creates applications with predefined tooling, folder structures, scripts, configuration, development conventions, code generators, optional integrations, and project diagnostics.
 
 ## Project Status
 
 GMK Launchpad is currently under active development.
 
-Version `0.2.0` completes the **Generator Improvements** milestone, adding project-aware code generation for both web and API projects, interactive generation workflows, context bundles, component categories, and optional route registration.
+Version `0.3.0` completes the **Project Diagnostics** milestone, adding `gmk doctor` with project-aware validation for metadata, Launchpad compatibility, runtime requirements, dependencies, project structure, environment variables, and installed Launchpad features.
 
-The next milestone, `0.3.0`, will focus on project tooling, environment validation, and configuration helpers.
+The next milestone is `1.0.0`, which will focus on final release QA, documentation, package metadata review, and the first public npm release.
 
 Launchpad will not be published to npm until the `1.0.0` milestone is complete.
 
@@ -64,6 +64,12 @@ Check the installed version:
 
 ```bash
 gmk --version
+```
+
+Diagnose the current Launchpad project:
+
+```bash
+gmk doctor
 ```
 
 ## Create a Project
@@ -445,6 +451,92 @@ This adds a basic Serverless Framework configuration and package/deploy/remove s
 
 Project-specific infrastructure such as VPCs, RDS, S3, IAM policies, Route 53, and Secrets Manager remains intentionally outside Launchpad's automatic configuration.
 
+## Project Diagnostics
+
+Launchpad can inspect an existing generated project with:
+
+```bash
+gmk doctor
+```
+
+Doctor is project-aware and can resolve the Launchpad project root even when it is run from a nested directory.
+
+It validates the project without modifying it.
+
+Checks include:
+
+- Launchpad metadata
+- Project type
+- Launchpad version compatibility
+- Metadata schema compatibility
+- Node.js runtime support
+- npm availability
+- Core project dependencies
+- Expected web or API project structure
+- Environment files
+- Required environment variables
+- Docker feature files
+- AWS Cognito feature files and dependencies
+- AWS Lambda feature files and dependencies
+
+Example output:
+
+```text
+◆ GMK Launchpad Doctor
+
+Project
+✔  Launchpad metadata
+   .gmk-launchpad.json found.
+✔  Project type
+   Web
+✔  Metadata schema
+   Schema version 1 is supported.
+
+Runtime
+✔  Node.js
+   Node.js 22.x is supported.
+✔  npm
+   npm is available.
+
+Environment
+✔  Environment template
+   .env.example found.
+⚠  Environment file
+   .env was not found.
+
+Result
+✔  30 passed
+⚠  2 warnings
+○  3 skipped
+```
+
+Diagnostic statuses are:
+
+```text
+✔  pass
+⚠  warning
+✖  error
+○  skipped
+```
+
+Warnings identify configuration that may still require attention but does not necessarily make the project invalid.
+
+Errors cause `gmk doctor` to set a non-zero process exit code, allowing the command to also be used in automated validation workflows.
+
+When `.env` is missing, Launchpad reports the file as a warning and skips checks for variables that cannot be validated. When `.env` exists but a required value is missing or empty, the missing variable is reported as an error.
+
+Feature-aware checks run only when the corresponding Launchpad feature is installed.
+
+Doctor is intentionally diagnostic only. It does not:
+
+- Rewrite project configuration
+- Automatically repair files
+- Provision AWS infrastructure
+- Validate live AWS account resources
+- Change Docker infrastructure
+- Run database migrations
+- Upgrade or migrate older Launchpad projects
+
 ## Project Metadata
 
 Launchpad identifies generated projects through:
@@ -456,6 +548,20 @@ Launchpad identifies generated projects through:
 The CLI can resolve the project root when commands are run from nested directories.
 
 Project metadata tracks the Launchpad schema version, the version used to generate the project, the project type, and installed Launchpad features.
+
+A project generated with an older Launchpad version can still be diagnosed when its metadata schema remains supported.
+
+Version differences are reported separately from schema incompatibility:
+
+```text
+older Launchpad version + supported schema
+→ warning
+
+unsupported metadata schema
+→ error
+```
+
+Launchpad does not automatically migrate older projects.
 
 ## Development
 
@@ -509,6 +615,12 @@ Launchpad can then be used like an installed CLI:
 gmk create
 ```
 
+Run project diagnostics:
+
+```bash
+gmk doctor
+```
+
 Remove the global development link when necessary with:
 
 ```bash
@@ -540,6 +652,7 @@ Launchpad separates CLI concerns into focused layers:
 ```text
 src/
 ├── commands/
+├── diagnostics/
 ├── features/
 ├── generators/
 ├── prompts/
@@ -559,15 +672,17 @@ src/
 └── cli.ts
 ```
 
+The diagnostic layer contains reusable project checks and report handling used by `gmk doctor`.
+
 Templates are copied into the build output and distributed with the CLI.
 
 Generated projects are created from GMK-owned templates rather than delegating project creation to external framework generators.
 
 ## Roadmap
 
-Launchpad follows Semantic Versioning throughout development. The `0.x` series is used to complete the planned pre-release milestones.
+Launchpad follows Semantic Versioning throughout development.
 
-Launchpad will move to `1.0.0` for its first public npm release after the planned pre-release milestones are complete and stable.
+The planned `0.x` development milestones are now complete. Launchpad will move to `1.0.0` after final stabilization, documentation, package review, and release QA.
 
 ### 0.1.0 — Foundation
 
@@ -596,11 +711,18 @@ Launchpad will move to `1.0.0` for its first public npm release after the planne
 - [x] Optional web page route registration
 - [x] GMK Launchpad starter landing page
 
-### 0.3.0 — Project Tooling
+### 0.3.0 — Project Diagnostics
 
-- [ ] Project diagnostics (`gmk doctor`)
-- [ ] Configuration helpers
-- [ ] Improved environment validation
+- [x] `gmk doctor`
+- [x] Project metadata validation
+- [x] Launchpad version and schema compatibility checks
+- [x] Runtime validation
+- [x] Dependency validation
+- [x] Project structure validation
+- [x] Environment variable validation
+- [x] Feature-aware diagnostics
+- [x] Actionable warning and error guidance
+- [x] Non-zero exit code when diagnostic errors are detected
 
 ### 1.0.0 — Public Release
 
