@@ -10,6 +10,10 @@ export interface TemplateVariables {
   moduleCamelName?: string;
   modulePascalName?: string;
   moduleConstantName?: string;
+  artifactName?: string;
+  artifactCamelName?: string;
+  artifactPascalName?: string;
+  artifactConstantName?: string;
 }
 
 const TEMPLATE_FILE_RENAMES = new Map<string, string>([
@@ -88,6 +92,18 @@ const getTemplateVariableValue = (variable: string, variables: TemplateVariables
 
     case 'MODULE_CONSTANT_NAME':
       return variables.moduleConstantName ?? `{{${variable}}}`;
+
+    case 'ARTIFACT_NAME':
+      return variables.artifactName ?? `{{${variable}}}`;
+
+    case 'ARTIFACT_CAMEL_NAME':
+      return variables.artifactCamelName ?? `{{${variable}}}`;
+
+    case 'ARTIFACT_PASCAL_NAME':
+      return variables.artifactPascalName ?? `{{${variable}}}`;
+
+    case 'ARTIFACT_CONSTANT_NAME':
+      return variables.artifactConstantName ?? `{{${variable}}}`;
 
     default:
       return `{{${variable}}}`;
