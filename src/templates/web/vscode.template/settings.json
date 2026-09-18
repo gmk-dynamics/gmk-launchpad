@@ -5,5 +5,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "js/ts.preferences.quoteStyle": "single"
+  "js/ts.preferences.quoteStyle": "single",
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
+  "css.lint.unknownAtRules": "ignore"
 }
