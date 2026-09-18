@@ -1,6 +1,6 @@
 export const CLI_NAME = 'GMK Launchpad';
 
-export const CLI_VERSION = '0.1.0';
+export const CLI_VERSION = '0.2.0';
 
 export const GMK_PRIMARY_COLOR = '#BB2026';
 
