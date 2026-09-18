@@ -1,11 +1,17 @@
 <div align="center">
 
 <a href="https://gmkdynamics.com">
-  <img
-    src="https://static.gmkdynamics.com/general/gmk-logo-red.webp"
-    alt="GMK Dynamics"
-    width="300"
-  />
+
+  <img
+
+    src="https://static.gmkdynamics.com/general/gmk-logo-red.webp"
+
+    alt="GMK Dynamics"
+
+    width="300"
+
+  />
+
 </a>
 
 <br />
@@ -14,7 +20,7 @@
 
 Opinionated project scaffolding for modern web applications and APIs.
 
-Built by **GMK Dynamics**.
+Built by ****GMK Dynamics****.
 
 <br />
 
@@ -26,7 +32,7 @@ Built by **GMK Dynamics**.
 
 ## Overview
 
-**GMK Launchpad** is a command-line project generation toolkit developed by GMK Dynamics.
+****GMK Launchpad**** is a command-line project generation toolkit developed by GMK Dynamics.
 
 It provides production-oriented application scaffolding based on the conventions and architecture used across GMK software projects.
 
@@ -36,20 +42,36 @@ Instead of generating generic starter projects that immediately require restruct
 
 ## Project Status
 
-GMK Launchpad is currently under active development.
+GMK Launchpad `1.0.0` is the first stable public release of the CLI.
 
-Version `0.3.0` completes the **Project Diagnostics** milestone, adding `gmk doctor` with project-aware validation for metadata, Launchpad compatibility, runtime requirements, dependencies, project structure, environment variables, and installed Launchpad features.
+The `1.0.0` release includes the completed Foundation, Generator Improvements, and Project Diagnostics milestones, providing project scaffolding, project-aware code generation, optional Docker and AWS integrations, project metadata, and `gmk doctor` diagnostics for generated projects.
 
-The next milestone is `1.0.0`, which will focus on final release QA, documentation, package metadata review, and the first public npm release.
+GMK Launchpad follows Semantic Versioning. Future releases will build on the stable `1.x` package while preserving the documented public CLI behavior wherever possible.
 
-Launchpad will not be published to npm until the `1.0.0` milestone is complete.
+## Installation
+
+GMK Launchpad requires Node.js 20 or newer.
+
+Install the CLI globally from npm:
+
+```bash
+npm install -g @gmkdynamics/launchpad
+```
+
+Verify the installation:
+
+```bash
+gmk --version
+```
 
 ## CLI
 
 Launchpad exposes the:
 
 ```bash
+
 gmk
+
 ```
 
 command.
@@ -57,19 +79,25 @@ command.
 View available commands:
 
 ```bash
+
 gmk --help
+
 ```
 
 Check the installed version:
 
 ```bash
+
 gmk --version
+
 ```
 
 Diagnose the current Launchpad project:
 
 ```bash
+
 gmk doctor
+
 ```
 
 ## Create a Project
@@ -77,18 +105,25 @@ gmk doctor
 Run:
 
 ```bash
+
 gmk create
+
 ```
 
 Launchpad will ask for a project name and project type.
 
 ```text
+
 ? Project name: Customer Portal
 
 ? Project type:
-  React + Vite
-  Express API
+
+  React + Vite
+
+  Express API
+
 ❯ Full Stack
+
 ```
 
 ### React + Vite
@@ -96,22 +131,35 @@ Launchpad will ask for a project name and project type.
 Generates:
 
 ```text
+
 customer-portal-web/
+
 ```
 
 with:
 
 - React
+
 - Vite
+
 - TypeScript
+
 - Tailwind CSS
+
 - React Router
+
 - ESLint
+
 - Prettier
+
 - Path aliases
+
 - GMK project structure
+
 - Development and validation scripts
+
 - GMK Launchpad starter landing page
+
 - Branded project documentation
 
 ### Express API
@@ -119,27 +167,45 @@ with:
 Generates:
 
 ```text
+
 customer-portal-api/
+
 ```
 
 with:
 
 - Node.js
+
 - Express
+
 - TypeScript
+
 - PostgreSQL
+
 - Prisma
+
 - Zod
+
 - Helmet
+
 - CORS
+
 - ESLint
+
 - Prettier
+
 - Health endpoint
+
 - Centralized error handling
+
 - Validation middleware
+
 - Node server entry point
+
 - AWS Lambda-compatible entry point
+
 - GMK backend architecture
+
 - Branded project documentation
 
 ### Full Stack
@@ -147,8 +213,11 @@ with:
 Generates two independent applications:
 
 ```text
+
 customer-portal-web/
+
 customer-portal-api/
+
 ```
 
 Launchpad does not create a monorepo or wrapper directory.
@@ -158,32 +227,59 @@ The frontend and API remain independent projects with their own dependencies, co
 ## Generated Frontend Structure
 
 ```text
+
 src/
+
 ├── assets/
+
 ├── enums/
+
 ├── interfaces/
+
 ├── models/
+
 ├── navigation/
+
 ├── pages/
+
 ├── services/
+
 ├── shared/
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── layout/
-│   │   ├── navigation/
-│   │   ├── modals/
-│   │   └── forms/
-│   ├── constants/
-│   ├── containers/
-│   ├── contexts/
-│   ├── data/
-│   ├── hooks/
-│   ├── mocks/
-│   ├── props/
-│   ├── providers/
-│   ├── styles/
-│   └── utils/
+
+│   ├── components/
+
+│   │   ├── ui/
+
+│   │   ├── layout/
+
+│   │   ├── navigation/
+
+│   │   ├── modals/
+
+│   │   └── forms/
+
+│   ├── constants/
+
+│   ├── containers/
+
+│   ├── contexts/
+
+│   ├── data/
+
+│   ├── hooks/
+
+│   ├── mocks/
+
+│   ├── props/
+
+│   ├── providers/
+
+│   ├── styles/
+
+│   └── utils/
+
 └── types/
+
 ```
 
 New web projects include a starter landing page registered at `/`, with React Router wired through the application template.
@@ -191,32 +287,53 @@ New web projects include a starter landing page registered at `/`, with React Ro
 ## Generated API Structure
 
 ```text
+
 prisma/
+
 └── schema.prisma
 
 src/
+
 ├── config/
+
 ├── middlewares/
+
 ├── modules/
+
 ├── routes/
+
 ├── shared/
-│   ├── constants/
-│   ├── errors/
-│   ├── services/
-│   ├── types/
-│   └── utils/
+
+│   ├── constants/
+
+│   ├── errors/
+
+│   ├── services/
+
+│   ├── types/
+
+│   └── utils/
+
 ├── types/
+
 ├── app.ts
+
 ├── lambda.ts
+
 └── server.ts
+
 ```
 
 The runtime architecture intentionally separates the Express application from its execution environment:
 
 ```text
+
 server.ts ──┐
-            ├──> app.ts
+
+            ├──> app.ts
+
 lambda.ts ──┘
+
 ```
 
 This allows the same application to run through a standard Node.js process or an AWS Lambda handler without restructuring application code.
@@ -228,7 +345,9 @@ Launchpad can generate application code inside existing GMK Launchpad projects.
 Run the project-aware interactive generator:
 
 ```bash
+
 gmk generate
+
 ```
 
 Launchpad detects whether the current project is a web or API project and presents only the relevant generators.
@@ -238,12 +357,19 @@ Direct commands remain available for scripting and automation.
 ### Web Generators
 
 ```bash
+
 gmk generate component <name> --type <type>
+
 gmk generate page <name>
+
 gmk generate service <name>
+
 gmk generate context <name>
+
 gmk generate provider <name>
+
 gmk generate hook <name>
+
 ```
 
 #### Components
@@ -251,25 +377,37 @@ gmk generate hook <name>
 Supported component types:
 
 ```text
+
 ui
+
 layout
+
 navigation
+
 modals
+
 forms
+
 ```
 
 For example:
 
 ```bash
+
 gmk generate component navbar --type navigation
+
 ```
 
 generates:
 
 ```text
+
 src/shared/components/navigation/navbar/
+
 ├── navbar.component.tsx
+
 └── index.ts
+
 ```
 
 Generated React `.tsx` artifacts follow the GMK Launchpad React component convention using `React.FC`.
@@ -279,21 +417,29 @@ Generated React `.tsx` artifacts follow the GMK Launchpad React component conven
 Generate a page with:
 
 ```bash
+
 gmk generate page dashboard
+
 ```
 
 which creates:
 
 ```text
+
 src/pages/dashboard/
+
 ├── dashboard.page.tsx
+
 └── index.ts
+
 ```
 
 Pages can optionally be registered with React Router:
 
 ```bash
+
 gmk generate page dashboard --route /dashboard
+
 ```
 
 The interactive generator can also ask whether the page should be registered automatically.
@@ -303,13 +449,17 @@ The interactive generator can also ask whether the page should be registered aut
 Generate a frontend service with:
 
 ```bash
+
 gmk generate service invoices
+
 ```
 
 which creates:
 
 ```text
+
 src/services/invoices.service.ts
+
 ```
 
 #### Context Bundles
@@ -319,17 +469,25 @@ Context, provider, and hook generation operate as a single bundle.
 Any of these commands:
 
 ```bash
+
 gmk generate context auth
+
 gmk generate provider auth
+
 gmk generate hook auth
+
 ```
 
 generate:
 
 ```text
+
 src/shared/contexts/auth.context.ts
+
 src/shared/providers/auth.provider.tsx
+
 src/shared/hooks/use-auth.hook.ts
+
 ```
 
 Inputs such as `auth`, `AuthContext`, `auth-provider`, `use-auth`, and `useAuth` are normalized to the same bundle name.
@@ -337,9 +495,13 @@ Inputs such as `auth`, `AuthContext`, `auth-provider`, `use-auth`, and `useAuth`
 ### API Generators
 
 ```bash
+
 gmk generate module <name>
+
 gmk generate middleware <name>
+
 gmk generate service <name>
+
 ```
 
 #### Modules
@@ -347,28 +509,43 @@ gmk generate service <name>
 Generated backend modules follow the GMK nine-file module convention:
 
 ```text
+
 src/modules/example/
+
 ├── example.constants.ts
+
 ├── example.controller.ts
+
 ├── example.mapper.ts
+
 ├── example.repository.ts
+
 ├── example.routes.ts
+
 ├── example.service.ts
+
 ├── example.types.ts
+
 ├── example.validation.ts
+
 └── index.ts
+
 ```
 
 Generate a module with:
 
 ```bash
+
 gmk generate module sales-order
+
 ```
 
 Modules can optionally register their router automatically:
 
 ```bash
+
 gmk generate module client --route /clients
+
 ```
 
 The interactive generator can also ask whether the module router should be registered.
@@ -378,13 +555,17 @@ The interactive generator can also ask whether the module router should be regis
 Generate API middleware with:
 
 ```bash
+
 gmk generate middleware request-id
+
 ```
 
 which creates:
 
 ```text
+
 src/middlewares/request-id.middleware.ts
+
 ```
 
 #### Services
@@ -392,13 +573,17 @@ src/middlewares/request-id.middleware.ts
 Generate a shared API service with:
 
 ```bash
+
 gmk generate service email
+
 ```
 
 which creates:
 
 ```text
+
 src/shared/services/email.service.ts
+
 ```
 
 ## Feature Commands
@@ -410,7 +595,9 @@ Launchpad can add capabilities to existing generated projects without rebuilding
 Add Docker support with:
 
 ```bash
+
 gmk add docker
+
 ```
 
 For web projects, this adds a production Nginx container configuration and `docker:build` / `docker:run` scripts.
@@ -420,7 +607,9 @@ For API projects, this adds the API container plus a Docker Compose environment 
 Before starting the API Compose environment, create the local Docker environment file from `.env.docker.example`, then run:
 
 ```bash
+
 npm run docker:up
+
 ```
 
 The PostgreSQL service persists data in a named Docker volume and exposes port `5433` by default to avoid colliding with a typical host PostgreSQL installation on `5432`.
@@ -430,7 +619,9 @@ The PostgreSQL service persists data in a named Docker volume and exposes port `
 AWS Cognito integration is available for both web and API projects:
 
 ```bash
+
 gmk add cognito
+
 ```
 
 For API projects, Launchpad adds Cognito JWT verification, authentication middleware, request typing, and the required environment variable placeholders.
@@ -444,7 +635,9 @@ Launchpad prepares the application integration only; it does not provision Cogni
 AWS Lambda deployment support is available for API projects:
 
 ```bash
+
 gmk add lambda
+
 ```
 
 This adds a basic Serverless Framework configuration and package/deploy/remove scripts around the existing `src/lambda.ts` handler.
@@ -456,7 +649,9 @@ Project-specific infrastructure such as VPCs, RDS, S3, IAM policies, Route 53, a
 Launchpad can inspect an existing generated project with:
 
 ```bash
+
 gmk doctor
+
 ```
 
 Doctor is project-aware and can resolve the Launchpad project root even when it is run from a nested directory.
@@ -466,57 +661,93 @@ It validates the project without modifying it.
 Checks include:
 
 - Launchpad metadata
+
 - Project type
+
 - Launchpad version compatibility
+
 - Metadata schema compatibility
+
 - Node.js runtime support
+
 - npm availability
+
 - Core project dependencies
+
 - Expected web or API project structure
+
 - Environment files
+
 - Required environment variables
+
 - Docker feature files
+
 - AWS Cognito feature files and dependencies
+
 - AWS Lambda feature files and dependencies
 
 Example output:
 
 ```text
+
 ◆ GMK Launchpad Doctor
 
 Project
-✔  Launchpad metadata
-   .gmk-launchpad.json found.
-✔  Project type
-   Web
-✔  Metadata schema
-   Schema version 1 is supported.
+
+✔  Launchpad metadata
+
+   .gmk-launchpad.json found.
+
+✔  Project type
+
+   Web
+
+✔  Metadata schema
+
+   Schema version 1 is supported.
 
 Runtime
-✔  Node.js
-   Node.js 22.x is supported.
-✔  npm
-   npm is available.
+
+✔  Node.js
+
+   Node.js 22.x is supported.
+
+✔  npm
+
+   npm is available.
 
 Environment
-✔  Environment template
-   .env.example found.
-⚠  Environment file
-   .env was not found.
+
+✔  Environment template
+
+   .env.example found.
+
+⚠  Environment file
+
+   .env was not found.
 
 Result
-✔  30 passed
-⚠  2 warnings
-○  3 skipped
+
+✔  30 passed
+
+⚠  2 warnings
+
+○  3 skipped
+
 ```
 
 Diagnostic statuses are:
 
 ```text
-✔  pass
-⚠  warning
-✖  error
-○  skipped
+
+✔  pass
+
+⚠  warning
+
+✖  error
+
+○  skipped
+
 ```
 
 Warnings identify configuration that may still require attention but does not necessarily make the project invalid.
@@ -530,11 +761,17 @@ Feature-aware checks run only when the corresponding Launchpad feature is instal
 Doctor is intentionally diagnostic only. It does not:
 
 - Rewrite project configuration
+
 - Automatically repair files
+
 - Provision AWS infrastructure
+
 - Validate live AWS account resources
+
 - Change Docker infrastructure
+
 - Run database migrations
+
 - Upgrade or migrate older Launchpad projects
 
 ## Project Metadata
@@ -542,7 +779,9 @@ Doctor is intentionally diagnostic only. It does not:
 Launchpad identifies generated projects through:
 
 ```text
+
 .gmk-launchpad.json
+
 ```
 
 The CLI can resolve the project root when commands are run from nested directories.
@@ -554,11 +793,15 @@ A project generated with an older Launchpad version can still be diagnosed when 
 Version differences are reported separately from schema incompatibility:
 
 ```text
+
 older Launchpad version + supported schema
+
 → warning
 
 unsupported metadata schema
+
 → error
+
 ```
 
 Launchpad does not automatically migrate older projects.
@@ -568,31 +811,41 @@ Launchpad does not automatically migrate older projects.
 Clone the repository and install dependencies:
 
 ```bash
+
 npm install
+
 ```
 
 Start the CLI directly from source:
 
 ```bash
+
 npm run dev -- create
+
 ```
 
 Build Launchpad:
 
 ```bash
+
 npm run build
+
 ```
 
 Validate the project:
 
 ```bash
+
 npm run check
+
 ```
 
 Format the codebase:
 
 ```bash
+
 npm run format
+
 ```
 
 ## Local CLI Testing
@@ -600,41 +853,53 @@ npm run format
 Build the package:
 
 ```bash
+
 npm run build
+
 ```
 
 Link it locally:
 
 ```bash
+
 npm link
+
 ```
 
 Launchpad can then be used like an installed CLI:
 
 ```bash
+
 gmk create
+
 ```
 
 Run project diagnostics:
 
 ```bash
+
 gmk doctor
+
 ```
 
 Remove the global development link when necessary with:
 
 ```bash
+
 npm unlink -g @gmkdynamics/launchpad
+
 ```
 
 ## Package Testing
 
-Launchpad is not published to npm during the `0.x` development series.
+GMK Launchpad is distributed publicly through npm as `@gmkdynamics/launchpad`.
 
-Create a local package archive with:
+For local release testing, create a package archive with:
 
 ```bash
+
 npm pack
+
 ```
 
 This produces a `.tgz` archive containing the distributable package and can be installed on another machine to test the exact package contents without publishing to npm.
@@ -642,7 +907,9 @@ This produces a `.tgz` archive containing the distributable package and can be i
 Inspect the package contents without creating the final archive:
 
 ```bash
+
 npm pack --dry-run
+
 ```
 
 ## Architecture
@@ -650,26 +917,47 @@ npm pack --dry-run
 Launchpad separates CLI concerns into focused layers:
 
 ```text
+
 src/
+
 ├── commands/
+
 ├── diagnostics/
+
 ├── features/
+
 ├── generators/
+
 ├── prompts/
+
 ├── shared/
-│   ├── constants/
-│   ├── filesystem/
-│   ├── logger/
-│   ├── project/
-│   └── utils/
+
+│   ├── constants/
+
+│   ├── filesystem/
+
+│   ├── logger/
+
+│   ├── project/
+
+│   └── utils/
+
 ├── templates/
-│   ├── api/
-│   ├── features/
-│   ├── generators/
-│   ├── module/
-│   └── web/
+
+│   ├── api/
+
+│   ├── features/
+
+│   ├── generators/
+
+│   ├── module/
+
+│   └── web/
+
 ├── types/
+
 └── cli.ts
+
 ```
 
 The diagnostic layer contains reusable project checks and report handling used by `gmk doctor`.
@@ -680,9 +968,9 @@ Generated projects are created from GMK-owned templates rather than delegating p
 
 ## Roadmap
 
-Launchpad follows Semantic Versioning throughout development.
+Launchpad follows Semantic Versioning.
 
-The planned `0.x` development milestones are now complete. Launchpad will move to `1.0.0` after final stabilization, documentation, package review, and release QA.
+The planned pre-release milestones are complete, and `1.0.0` marks the first stable public release.
 
 ### 0.1.0 — Foundation
 
@@ -726,13 +1014,15 @@ The planned `0.x` development milestones are now complete. Launchpad will move t
 
 ### 1.0.0 — Public Release
 
-- [ ] Final release QA
-- [ ] Dedicated GMK Launchpad documentation website
-- [ ] Final npm package metadata and documentation review
-- [ ] Public npm release
+- [x] Final release QA
+- [x] Public npm package metadata
+- [x] External tarball installation testing
+- [x] npm organization and public package configuration
+- [x] Public npm release preparation
 
 ### Future
 
+- [ ] Dedicated GMK Launchpad documentation website
 - [ ] Automated project migrations and upgrades
 - [ ] Plugin and extension architecture
 - [ ] Additional templates based on GMK projects
