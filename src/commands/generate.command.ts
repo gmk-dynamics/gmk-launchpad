@@ -6,6 +6,11 @@ import { generateMiddleware } from '../generators/middleware.generator.js';
 import { generateModule } from '../generators/module.generator.js';
 import { generatePage } from '../generators/page.generator.js';
 import { generateService } from '../generators/service.generator.js';
+import {
+  promptComponentCategory,
+  promptGeneratorName,
+  promptGeneratorType,
+} from '../prompts/generate.prompt.js';
 import type { WebComponentCategory } from '../shared/constants/generator.constants.js';
 import { isWebComponentCategory } from '../shared/constants/generator.constants.js';
 import { printInfo, printSection, printSuccess } from '../shared/logger/console.logger.js';
@@ -180,9 +185,120 @@ const providerCommand = createContextBundleCommand('provider');
 
 const hookCommand = createContextBundleCommand('hook');
 
-export const generateCommand = new Command('generate').description(
-  'Generate resources for a GMK Launchpad project',
-);
+export const generateCommand = new Command('generate')
+  .description('Generate resources for a GMK Launchpad project')
+  .action(async () => {
+    const context = await projectContextService.getProjectContext();
+
+    const generatorType = await promptGeneratorType(context.metadata.projectType);
+
+    const requestedName = await promptGeneratorName(generatorType);
+
+    switch (generatorType) {
+      case 'module': {
+        const moduleName = normalizeModuleName(requestedName);
+
+        printSection('Module Generation');
+
+        printInfo('Project', 'API');
+        printInfo('Module', moduleName.slug);
+        printInfo('Root', context.rootPath);
+
+        await generateModule(context, moduleName);
+
+        printSuccess(`${moduleName.pascalCase} module generated successfully.`);
+
+        return;
+      }
+
+      case 'middleware': {
+        const middlewareName = normalizeGeneratorName(requestedName, ['middleware']);
+
+        printSection('Middleware Generation');
+
+        printInfo('Project', 'API');
+        printInfo('Middleware', middlewareName.slug);
+        printInfo('Root', context.rootPath);
+
+        await generateMiddleware(context, middlewareName);
+
+        printSuccess(`${middlewareName.pascalCase} middleware generated successfully.`);
+
+        return;
+      }
+
+      case 'service': {
+        const serviceName = normalizeGeneratorName(requestedName, ['service']);
+
+        printSection('Service Generation');
+
+        printInfo('Project', context.metadata.projectType === 'api' ? 'API' : 'Web');
+
+        printInfo('Service', serviceName.slug);
+
+        printInfo('Root', context.rootPath);
+
+        await generateService(context, serviceName);
+
+        printSuccess(`${serviceName.pascalCase} service generated successfully.`);
+
+        return;
+      }
+
+      case 'component': {
+        const componentName = normalizeGeneratorName(requestedName, ['component']);
+
+        const category = await promptComponentCategory();
+
+        printSection('Component Generation');
+
+        printInfo('Project', 'Web');
+        printInfo('Component', componentName.slug);
+        printInfo('Type', category);
+        printInfo('Root', context.rootPath);
+
+        await generateComponent(context, componentName, category);
+
+        printSuccess(`${componentName.pascalCase} component generated successfully.`);
+
+        return;
+      }
+
+      case 'page': {
+        const pageName = normalizeGeneratorName(requestedName, ['page']);
+
+        printSection('Page Generation');
+
+        printInfo('Project', 'Web');
+        printInfo('Page', pageName.slug);
+        printInfo('Root', context.rootPath);
+
+        await generatePage(context, pageName);
+
+        printSuccess(`${pageName.pascalCase} page generated successfully.`);
+
+        return;
+      }
+
+      case 'context': {
+        const contextName = normalizeContextBundleName(requestedName);
+
+        printSection('Context Bundle Generation');
+
+        printInfo('Project', 'Web');
+        printInfo('Context', contextName.slug);
+        printInfo('Root', context.rootPath);
+
+        await generateContextBundle(context, contextName);
+
+        printSuccess(
+          `${contextName.pascalCase} context, provider, and hook generated successfully.`,
+        );
+
+        return;
+      }
+    }
+  });
 
 generateCommand.addCommand(moduleCommand);
 generateCommand.addCommand(middlewareCommand);
