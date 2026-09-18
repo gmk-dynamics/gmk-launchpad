@@ -3,7 +3,11 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
+
+const tsconfigRootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
   {
@@ -17,6 +21,10 @@ export default tseslint.config(
       ecmaVersion: 'latest',
       globals: {
         ...globals.browser,
+      },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir,
       },
     },
     plugins: {
